@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Robot" />
         <module name="RecreateRobot" />
+        <module name="MCServer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -17,6 +18,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="MCServer" options="-parameters" />
       <module name="RecreateRobot" options="-parameters" />
       <module name="Robot" options="-parameters" />
     </option>
