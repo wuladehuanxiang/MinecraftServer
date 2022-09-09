@@ -1,6 +1,10 @@
-package Main.Service;
+package moudle.service;
 
-public interface userServiceIMP {
+/**
+ * 用户管理服务层
+ */
+public interface UserService {
+
     public boolean login();
 
     public boolean register();

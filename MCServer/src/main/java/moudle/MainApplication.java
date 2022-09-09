@@ -1,8 +1,9 @@
-package Main;
+package moudle;
 
-import Main.Data.staticData;
-import Main.Utils.InitUtil;
 
+
+import moudle.data.StaticData;
+import moudle.utils.InitUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,17 +13,18 @@ import java.io.IOException;
 
 /**
  * 程序入口
+ * @author
  */
 @SpringBootApplication
-public class Main {
+public class MainApplication {
 
 
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(MainApplication.class, args);
         InitUtil.init();
 
-        for (Class c: staticData.allClasses
+        for (Class c: StaticData.allClasses
              ) {
             System.out.println(c.getName());
 

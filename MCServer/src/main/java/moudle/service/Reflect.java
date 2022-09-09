@@ -1,5 +1,5 @@
-package Main.Service;
+package moudle.service;
 
-public interface reflectIMPL {
+public interface Reflect {
     public Object getOBJFromJSON(String JSON, Class c);
 }

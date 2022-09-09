@@ -1,18 +1,11 @@
-package Main.Utils;
+package moudle.utils;
 
 
-import Main.Data.staticData;
-import Main.Main;
 
-import java.io.File;
-import java.io.FileFilter;
+import moudle.data.StaticData;
+
 import java.io.IOException;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 
 public class InitUtil {
@@ -40,7 +33,7 @@ public class InitUtil {
      *  将所有的CLASS缓存到内存中
      */
     public static void initClasses() {
-        staticData.allClasses = ReflectUtil.getClasses("Main.Class");
+        StaticData.allClasses = ReflectUtil.getClasses("java.Class");
     }
 
     public void initFiles() {
