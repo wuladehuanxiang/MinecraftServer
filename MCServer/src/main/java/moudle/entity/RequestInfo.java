@@ -18,7 +18,6 @@ public class RequestInfo {
      * 数据
      */
     private String jsonString;
-
     /**
      * 类名
      */

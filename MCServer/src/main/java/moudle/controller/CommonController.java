@@ -37,8 +37,7 @@ public class CommonController {
     //@ApiOperation(value = "新增服务")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public RespResult add(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        this.commonService.createService(message.getContent());
-        return RespResult.succeed(RespCodeEnum.SUCCESS.getMessage());
+        return RespResult.succeed(this.commonService.createService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -50,8 +49,7 @@ public class CommonController {
     //@ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public RespResult delete(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        this.commonService.deleteService(message.getContent());
-        return RespResult.succeed(RespCodeEnum.SUCCESS.getMessage());
+        return RespResult.succeed(this.commonService.deleteService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -63,8 +61,7 @@ public class CommonController {
     //@ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public RespResult update(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        this.commonService.updateService(message.getContent());
-        return RespResult.succeed(RespCodeEnum.SUCCESS.getMessage());
+        return RespResult.succeed(this.commonService.updateService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -76,8 +73,8 @@ public class CommonController {
     //@ApiOperation(value = "查询")
     @RequestMapping(value = "/request", method = RequestMethod.POST)
     public RespResult RespResult(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        this.commonService.requestService(message.getContent());
-        return RespResult.succeed(RespCodeEnum.SUCCESS.getMessage());
+        ;
+        return RespResult.succeed(this.commonService.requestService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
 

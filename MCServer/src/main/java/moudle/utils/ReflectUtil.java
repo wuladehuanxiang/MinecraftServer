@@ -1,12 +1,15 @@
 package moudle.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import moudle.data.StaticData;
+import moudle.entity.User;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -46,19 +49,35 @@ public class ReflectUtil {
      * @param className 类名
      * @return 反射获取到的类（已经将其属性置入）
      */
-    public Object getObjectFJSON(String jsonSTR, String className) {
+    public static Object getObjectFJSON(String jsonSTR, String className) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         Class c = null;
 
         if (hasThisClass(className) != null) {
             c = hasThisClass(className);
         }
+
+
         if (c != null) {
+
+            JSONObject jsonObject = JSON.parseObject(jsonSTR);
+
+            Object object = c.getDeclaredConstructor().newInstance();
+
+
             //若有这个类 遍历所有的属性
-            for (Field field : c.getFields()
+            for (Field field : c.getDeclaredFields()
             ) {
-                System.out.println(field.getName());
+                field.setAccessible(true);
+            }
+            for (Field field : object.getClass().getDeclaredFields()
+            ) {
+                field.setAccessible(true);
+                field.set(object,jsonObject.get(field.getName()).toString());
             }
 
+            User user = (User) object;
+
+            System.out.println(JSON.toJSON(user).toString());
 
         }
         return null;
