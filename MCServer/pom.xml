@@ -48,6 +48,7 @@
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
         <swagger-bootstrap-ui.version>3.0.3</swagger-bootstrap-ui.version>
         <!-- swagger end -->
+        <git-commit.version>4.9.10</git-commit.version>
     </properties>
     <dependencies>
 
@@ -277,6 +278,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
+                <version>${git-commit.version}</version>
                 <executions>
                     <execution>
                         <goals>
