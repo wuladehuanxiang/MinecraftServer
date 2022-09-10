@@ -26,13 +26,36 @@ public class UserController {
 
     /**
      * 新增用户
+     *
      * @param message
+     * {
+     * 	"header": {
+     * 		"content": ""
+     *        },
+     * 	"content": {
+     * 		"uuid": null,
+     * 		"account": "test",
+     * 		"name": "测试",
+     * 		"password": "123456"
+     *    }
+     * }
+     *
      * @return
+     * {
+     *     "data": {
+     *         "uuid": "f369cb79c27cfd2e83d97aa5347dc1ff",
+     *         "account": "test",
+     *         "name": "测试",
+     *         "password": "123456"
+     *     },
+     *     "respCode": 200,
+     *     "respMsg": "处理成功"
+     * }
      */
     //@ApiOperation(value = "新增用户")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public RespResult add(@Valid @RequestBody RequestMessage<User> message) {
-        this.userService.addUser(message.getContent());
-        return RespResult.succeed(RespCodeEnum.SUCCESS.getMessage());
+    public RespResult<User> add(@Valid @RequestBody RequestMessage<User> message) {
+        User user = this.userService.addUser(message.getContent());
+        return RespResult.succeed(user,RespCodeEnum.SUCCESS.getMessage());
     }
 }

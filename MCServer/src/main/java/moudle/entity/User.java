@@ -25,7 +25,7 @@ public class User {
      * uuid
      */
     //@ApiModelProperty(value = "uuid")
-    @TableId(value = "id",type = IdType.ASSIGN_UUID)
+    @TableId(value = "uuid",type = IdType.ASSIGN_UUID)
     private String uuid;
 
     /**
