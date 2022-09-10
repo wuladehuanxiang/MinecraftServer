@@ -1,7 +1,7 @@
 package moudle.common.base;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,23 +21,23 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Api(value = "响应接口")
+//@Api(value = "响应接口")
 public class RespResult<T> implements Serializable {
 	public static final long serialVersionUID = 42L;
 	/**
 	 * 响应数据
  	 */
-	@ApiModelProperty(value = "响应数据")
+	//@ApiModelProperty(value = "响应数据")
 	private T data;
 	/**
 	 * 响应编码(200:正常，其他:异常)
  	 */
-	@ApiModelProperty(value = "响应编码(200:正常，其他:异常)")
+	//@ApiModelProperty(value = "响应编码(200:正常，其他:异常)")
 	private Integer respCode;
 	/**
 	 * 响应消息
  	 */
-	@ApiModelProperty(value = "响应消息")
+	//@ApiModelProperty(value = "响应消息")
 	private String respMsg;
 
 	public static <T> RespResult<T> of(T data, Integer code, String msg) {

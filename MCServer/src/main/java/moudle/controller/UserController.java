@@ -1,6 +1,6 @@
 package moudle.controller;
 
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 import moudle.common.base.RequestMessage;
 import moudle.common.base.RespResult;
 import moudle.common.enums.RespCodeEnum;
@@ -29,7 +29,7 @@ public class UserController {
      * @param message
      * @return
      */
-    @ApiOperation(value = "新增用户")
+    //@ApiOperation(value = "新增用户")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public RespResult add(@Valid @RequestBody RequestMessage<User> message) {
         this.userService.addUser(message.getContent());
