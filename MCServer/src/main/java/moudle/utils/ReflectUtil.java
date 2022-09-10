@@ -1,26 +1,67 @@
 package moudle.utils;
 
 import com.alibaba.fastjson.JSON;
+import moudle.data.StaticData;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Enumeration;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class ReflectUtil {
+
+    /**
+     * @param className
+     * @return 看缓存中是否有这个类
+     */
+    public static Class hasThisClass(String className) {
+        for (Class c : StaticData.allClasses
+        ) {
+            String[] args = c.getName().split("\\.");
+            if (args[args.length - 1].equals(className)) {
+                return c;
+            }
+
+        }
+        return null;
+    }
+
     /**
      * @param jsonSTR JSON字符串 用于生成一个对象
      * @return
      */
     public Object getObjectFJSON(String jsonSTR, Class c) {
         return JSON.parseObject(jsonSTR, c);
+    }
+
+
+    /**
+     * @param jsonSTR   实体类的json格式
+     * @param className 类名
+     * @return 反射获取到的类（已经将其属性置入）
+     */
+    public Object getObjectFJSON(String jsonSTR, String className) {
+        Class c = null;
+
+        if (hasThisClass(className) != null) {
+            c = hasThisClass(className);
+        }
+        if (c != null) {
+            //若有这个类 遍历所有的属性
+            for (Field field : c.getFields()
+            ) {
+                System.out.println(field.getName());
+            }
+
+
+        }
+        return null;
     }
 
 

@@ -32,7 +32,7 @@ public class InitUtil {
      * 将所有的CLASS缓存到内存中
      */
     public static void initClasses() {
-        StaticData.allClasses = ReflectUtil.getClasses("java.moudle.entity");
+        StaticData.allClasses = ReflectUtil.getClasses("moudle.entity");
     }
 
     public void initFiles() {

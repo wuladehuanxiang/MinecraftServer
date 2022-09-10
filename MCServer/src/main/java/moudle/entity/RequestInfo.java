@@ -15,7 +15,7 @@ public class RequestInfo {
     private requestType requestType;
 
     /**
-     * 数据格式
+     * 数据
      */
     private String jsonString;
 
@@ -24,7 +24,14 @@ public class RequestInfo {
      */
     private String className;
 
-    enum requestType {
-        request_info, update, delete, create
+    public enum requestType {
+        /**
+         * request 请求信息
+         * update 更新信息
+         * delete 删除信息
+         * create 创建信息
+         * verification 验证信息
+         */
+        request, update, delete, create, verification
     }
 }
