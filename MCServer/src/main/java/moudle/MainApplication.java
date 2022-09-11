@@ -1,6 +1,7 @@
 package moudle;
 
 import com.alibaba.fastjson.JSON;
+import moudle.common.base.BasePageInfo;
 import moudle.controller.CommonController;
 import moudle.data.StaticData;
 import moudle.entity.RequestInfo;
@@ -31,13 +32,14 @@ public class MainApplication {
         InitUtil.init();
 
 
-
-
-
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setRequestType(RequestInfo.requestType.request.toString());
         requestInfo.setClassName("User");
         requestInfo.setJsonString("aaa");
+        requestInfo.setBasePageInfo(new BasePageInfo() {{
+            this.setPageNum(1);
+            this.setPageSize(1);
+        }});
         System.out.println(JSON.toJSON(requestInfo).toString());
         System.out.println(JSON.toJSON(new User() {{
             this.setAccount("492397708");

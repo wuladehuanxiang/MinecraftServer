@@ -61,19 +61,15 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             return RespResult.failed("不存在此类名，请重新请求");
         }
 
-        if (JSON.parseObject(requestInfo.getJsonString()).getJSONObject("BasePageInfo") != null) {
+        if (requestInfo.getBasePageInfo() != null) {
             //说明拿了一批数据 那么要拿多少 由他自己定义
-            BasePageInfo basePageInfo = (BasePageInfo) ReflectUtil.getObjectFJSON(JSON.parseObject(requestInfo.getJsonString()).getString("BasePageInfo"), BasePageInfo.class);
-            Class theClass = ReflectUtil.hasThisClass(requestInfo.getClassName());
-            QueryWrapper<Object> wrapper = new QueryWrapper<>();
-            wrapper.isNotNull("uuid");
+            BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
+            //取一定量的数量 返回
 
-            Page<Object> page = new Page<>(1, 4);
-//            Page<Object> result = CommonMapper.selectPage((Page<theClass>) page, wrapper);
-
+            //
+            return null;
         }
 
-        System.out.println(JSON.toJSON(requestInfo));
 
         //UUID为空
         Object uuid = getUUID(requestInfo);
