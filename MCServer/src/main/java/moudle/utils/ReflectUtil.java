@@ -35,11 +35,23 @@ public class ReflectUtil {
         return null;
     }
 
+    public static Class hasThisMapper(String className) {
+        for (Class c : StaticData.mapperClasses
+        ) {
+            String[] args = c.getName().split("\\.");
+            if (args[args.length - 1].equals(className)) {
+                return c;
+            }
+
+        }
+        return null;
+    }
+
     /**
      * @param jsonSTR JSON字符串 用于生成一个对象
      * @return
      */
-    public Object getObjectFJSON(String jsonSTR, Class c) {
+    public static Object getObjectFJSON(String jsonSTR, Class c) {
         return JSON.parseObject(jsonSTR, c);
     }
 

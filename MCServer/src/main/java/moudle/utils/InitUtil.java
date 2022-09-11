@@ -33,6 +33,9 @@ public class InitUtil {
      */
     public static void initClasses() {
         StaticData.allClasses = ReflectUtil.getClasses("moudle.entity");
+        StaticData.mapperClasses = ReflectUtil.getClasses("moudle.dao");
+
+
     }
 
     public void initFiles() {
