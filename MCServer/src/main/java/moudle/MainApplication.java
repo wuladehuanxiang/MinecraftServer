@@ -10,8 +10,10 @@ import moudle.service.impl.CommonServiceImpl;
 import moudle.utils.InitUtil;
 import moudle.utils.ReflectUtil;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +27,7 @@ import java.util.UUID;
  */
 @SpringBootApplication
 @MapperScan("moudle.dao")
+@Configuration
 public class MainApplication {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
@@ -32,13 +35,13 @@ public class MainApplication {
         InitUtil.init();
 
 
-        RequestInfo requestInfo = new RequestInfo();
+/*        RequestInfo requestInfo = new RequestInfo();
         requestInfo.setRequestType(RequestInfo.requestType.request.toString());
         requestInfo.setClassName("User");
         requestInfo.setJsonString("aaa");
         requestInfo.setBasePageInfo(new BasePageInfo() {{
             this.setPageNum(1);
-            this.setPageSize(1);
+            this.setPageSize(10);
         }});
         System.out.println(JSON.toJSON(requestInfo).toString());
         System.out.println(JSON.toJSON(new User() {{
@@ -47,7 +50,7 @@ public class MainApplication {
             this.setPassword("123456");
             this.setUuid(UUID.randomUUID().toString());
         }}).toString());
-        ;
+        ;*/
 
 
 //        ReflectUtil.getObjectFJSON("{\"password\":\"123456\",\"name\":\"wula\",\"uuid\":\"9f9643c3-81c1-4df2-a819-47a3a1262883\",\"account\":\"492397708\"}", "User");

@@ -5,11 +5,24 @@ spring:
   datasource:
     dynamic:
       strict: false
-      primary: one
+      primary: core
       datasource:
-        one:
+        core:
           driver-class-name: com.mysql.jdbc.Driver
           url: jdbc:mysql://175.24.228.204:3306/mc_server?allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
           username: root
           password: root
+
+mybatis-plus:
+  mapper-locations: classpath*:mappings/*Mapper.xml
+
+logging:
+  level:
+    moudle.dao: debug
+    springfox.documentation.schema: error
+    root: INFO
+    org.hibernate: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
+    moudle: DEBUG
 

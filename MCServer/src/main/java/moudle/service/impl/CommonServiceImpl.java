@@ -2,6 +2,7 @@ package moudle.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +12,7 @@ import moudle.common.base.BasePageInfo;
 import moudle.common.exceptin.DefaultException;
 import moudle.dao.CommonMapper;
 import moudle.entity.RequestInfo;
+import moudle.entity.form.CommonSelectForm;
 import moudle.service.CommonService;
 import moudle.utils.ReflectUtil;
 import moudle.utils.UUIdUtils;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: wula
@@ -48,13 +51,15 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             throw new DefaultException("不存在此类名，请重新请求");
         }
 
-        if (requestInfo.getBasePageInfo() != null) {
+        if (requestInfo.getBasePageInfo() != null && requestInfo.getJsonString() != null) {
             //说明拿了一批数据 那么要拿多少 由他自己定义
             BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
+            basePageInfo.setPageNum((basePageInfo.getPageNum()-1) * basePageInfo.getPageSize());
+            String replace = requestInfo.getJsonString().replace("\\", "");
+            CommonSelectForm form = JSONObject.parseObject(replace, CommonSelectForm.class);
             //取一定量的数量 返回
-
-            //
-            return null;
+            List<Object> objects = baseMapper.commonSelectList(form, basePageInfo);
+            return objects;
         }
 
         //UUID为空
