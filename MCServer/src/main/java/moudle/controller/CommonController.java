@@ -31,6 +31,20 @@ public class CommonController {
      * 新增实例
      *
      * @param message
+     * {
+     * 	"header": {
+     * 		"content": ""
+     *        },
+     * 	"content": {
+     * 		"className": "User",
+     * 		"requestType": "request",
+     * 		"basePageInfo": {
+     * 			"pageNum": 1,
+     * 			"pageSize": 10
+     *        },
+     * 		"jsonString": "{\\\"tableName\":\"sys_user\",\"tableFields\":[\"account\",\"name\"],\"params\":[{\"tableField\":\"name\",\"property\":\"name\",\"param\":\"系统\"},{\"tableField\":\"account\",\"property\":\"account\",\"param\":\"123456\"}]}"
+     *    }
+     * }
      * @return 结果
      */
     //@ApiOperation(value = "新增服务")
