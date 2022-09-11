@@ -3,11 +3,13 @@ package moudle.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import moudle.common.exceptin.DefaultException;
 import moudle.dao.UserMapper;
 import moudle.entity.User;
 import org.springframework.stereotype.Service;
 
 import moudle.service.UserService;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 
@@ -26,6 +28,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User addUser(User user) {
+        Assert.isNull(user.getUuid(),"UUID不为空");
+        if(user.getUuid() != null){
+            throw new DefaultException("请求失败");
+        }
         userMapper.insert(user);
         log.info("新增人员成功；");
         return user;

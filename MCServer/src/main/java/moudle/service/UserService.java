@@ -1,6 +1,7 @@
 package moudle.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import moudle.common.exceptin.DefaultException;
 import moudle.entity.User;
 
 /**
@@ -15,7 +16,7 @@ public interface UserService extends IService<User> {
      * @param user
      * @return
      */
-    public User addUser(User user);
+    public User addUser(User user) throws DefaultException;
 
     public boolean login();
 
