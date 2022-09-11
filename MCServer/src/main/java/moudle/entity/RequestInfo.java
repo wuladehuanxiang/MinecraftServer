@@ -3,6 +3,7 @@ package moudle.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import moudle.common.base.BasePageInfo;
 
 @Data
 @NoArgsConstructor
@@ -25,8 +26,12 @@ public class RequestInfo {
      */
     private String className;
 
-    public enum requestType {
+    /**
+     * 请求页面信息
+     */
+    private BasePageInfo basePageInfo;
 
+    public enum requestType {
 
         /**
          * request 请求信息

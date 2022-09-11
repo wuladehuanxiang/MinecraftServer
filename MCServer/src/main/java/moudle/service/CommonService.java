@@ -12,19 +12,19 @@ public interface CommonService {
      * @param requestInfo
      * @return 请求的服务
      */
-    public Object requestService(RequestInfo requestInfo) throws IllegalAccessException;
+    public Object requestService(RequestInfo requestInfo) throws IllegalAccessException, NoSuchFieldException;
 
     /**
      * @param requestInfo
      * @return  更新的服务
      */
-    public Object updateService(RequestInfo requestInfo) throws IllegalAccessException;
+    public Object updateService(RequestInfo requestInfo) throws IllegalAccessException, NoSuchFieldException;
 
     /**
      * @param requestInfo
      * @return  移除的服务
      */
-    public Object deleteService(RequestInfo requestInfo) throws IllegalAccessException;
+    public Object deleteService(RequestInfo requestInfo) throws IllegalAccessException, NoSuchFieldException;
 
     /**
      * @param requestInfo

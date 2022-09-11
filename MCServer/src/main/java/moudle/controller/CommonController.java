@@ -36,7 +36,7 @@ public class CommonController {
      * @return 结果
      */
     //@ApiOperation(value = "新增服务")
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public RespResult add(@Valid @RequestBody RequestMessage<RequestInfo> message) throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         return RespResult.succeed(this.commonService.createService(message.getContent()),RespCodeEnum.SUCCESS.getMessage());
     }
@@ -49,7 +49,7 @@ public class CommonController {
      */
     //@ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public RespResult delete(@Valid @RequestBody RequestMessage<RequestInfo> message) throws IllegalAccessException {
+    public RespResult delete(@Valid @RequestBody RequestMessage<RequestInfo> message) throws IllegalAccessException, NoSuchFieldException {
         return RespResult.succeed(this.commonService.deleteService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
@@ -61,7 +61,7 @@ public class CommonController {
      */
     //@ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public RespResult update(@Valid @RequestBody RequestMessage<RequestInfo> message) throws IllegalAccessException {
+    public RespResult update(@Valid @RequestBody RequestMessage<RequestInfo> message) throws IllegalAccessException, NoSuchFieldException {
         return RespResult.succeed(this.commonService.updateService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
@@ -73,8 +73,7 @@ public class CommonController {
      */
     //@ApiOperation(value = "查询")
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public RespResult RespResult(@Valid @RequestBody RequestMessage<RequestInfo> message) throws IllegalAccessException {
-        ;
+    public RespResult RespResult(@Valid @RequestBody RequestMessage<RequestInfo> message) throws IllegalAccessException, NoSuchFieldException {
         return RespResult.succeed(this.commonService.requestService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
