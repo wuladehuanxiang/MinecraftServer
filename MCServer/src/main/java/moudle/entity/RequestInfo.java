@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
+
 public class RequestInfo {
 
     /**
      * 请求类型
      */
-    private requestType requestType;
+    private String requestType;
 
     /**
      * 数据
@@ -24,6 +26,8 @@ public class RequestInfo {
     private String className;
 
     public enum requestType {
+
+
         /**
          * request 请求信息
          * update 更新信息

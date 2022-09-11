@@ -36,7 +36,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
     @Override
     public Object requestService(RequestInfo requestInfo) {
         //若这个请求不是内容获取请求
-        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.request)) {
+        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.request.toString())) {
             return RespResult.failed("接口请求错误,此接口为请求专用");
         }
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) != null) {
@@ -44,7 +44,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         }
 
 
-        return null;
+        return requestInfo;
     }
 
     /**
@@ -54,13 +54,13 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
     @Override
     public Object updateService(RequestInfo requestInfo) {
         //若这个请求不是更新请求
-        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.update)) {
+        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.update.toString())) {
             return RespResult.failed("接口请求错误,此接口为更新专用");
         }
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) != null) {
             return RespResult.failed("不存在此类名，请重新请求");
         }
-        return null;
+        return requestInfo;
     }
 
     /**
@@ -70,7 +70,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
     @Override
     public Object deleteService(RequestInfo requestInfo) {
         //若这个请求不是删除请求
-        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.delete)) {
+        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.delete.toString())) {
             return RespResult.failed("接口请求错误,此接口为删除专用");
         }
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) != null) {
@@ -78,7 +78,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         }
 
 
-        return null;
+        return requestInfo;
     }
 
     /**
@@ -88,7 +88,8 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
     @Override
     public Object createService(RequestInfo requestInfo) {
         //若这个请求不是创建请求
-        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.create)) {
+        System.out.println(requestInfo.getRequestType()+" "+RequestInfo.requestType.create.toString());
+        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.create.toString())) {
             return RespResult.failed("接口请求错误,此接口为创建专用");
         }
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) != null) {
@@ -96,7 +97,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         }
 
 
-        return null;
+        return requestInfo;
     }
 
 }

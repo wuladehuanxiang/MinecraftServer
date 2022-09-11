@@ -37,7 +37,8 @@ public class CommonController {
     //@ApiOperation(value = "新增服务")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public RespResult add(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        return RespResult.succeed(this.commonService.createService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
+
+        return RespResult.succeed(this.commonService.createService(message.getContent()),RespCodeEnum.SUCCESS.getMessage());
     }
 
     /**
