@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -59,6 +60,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         }
 
         if (requestInfo.getBasePageInfo() != null && requestInfo.getJsonString() != null) {
+//            BaseMapper baseMapper = this.getMapper(requestInfo);
             //说明拿了一批数据 那么要拿多少 由他自己定义
             BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
             basePageInfo.setPageNum((basePageInfo.getPageNum() - 1) * basePageInfo.getPageSize());
@@ -70,6 +72,13 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             CommonSelectForm form = JSONObject.parseObject(replace, CommonSelectForm.class);
             //取一定量的数量 返回
             List<Object> objects = baseMapper.commonSelectList(form, basePageInfo);
+
+            for (Object o:objects
+                 ) {
+                HashMap hashMap=(HashMap)o;
+            }
+
+
             return objects;
         }
 
@@ -214,8 +223,6 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         ) {
             f.setAccessible(true);
             //说明是通用接口里面的 实例化的Mapper
-            System.out.println(requestInfo.getClassName() + "Mapper" + "     " + f.getName());
-
             if ((requestInfo.getClassName() + "Mapper").equals(f.getName())) {
                 f.setAccessible(true);
                 try {

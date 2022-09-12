@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="moudle.dao.CommonMapper">
 
-    <select id="commonSelectList" resultType="java.lang.Object" parameterType="moudle.entity.form.CommonSelectForm">
+    <select id="commonSelectList" resultType="java.util.HashMap" parameterType="moudle.entity.form.CommonSelectForm">
         SELECT
         <foreach collection="form.tableFields" index="index" item="item" open="" separator="," close="">
             ${item}
