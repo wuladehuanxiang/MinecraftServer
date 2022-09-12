@@ -47,9 +47,9 @@ public class JwtUtil {
     /**
      * @param name   名
      * @param userId 用户ID
-     * @return  生成的JWT
+     * @return 生成的JWT
      */
-    public static String createJWT(String name, Integer userId) {
+    public static String createJWT(String name, String userId) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
         long nowMillis = System.currentTimeMillis();
@@ -86,4 +86,5 @@ public class JwtUtil {
             return null;
         }
     }
+
 }

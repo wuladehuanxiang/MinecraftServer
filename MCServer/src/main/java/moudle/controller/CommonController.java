@@ -7,7 +7,9 @@ import moudle.common.enums.RespCodeEnum;
 import moudle.entity.RequestInfo;
 import moudle.entity.User;
 import moudle.service.CommonService;
+import moudle.utils.JwtUtil;
 import moudle.utils.StringTools;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -91,33 +93,30 @@ public class CommonController {
     }
 
 
-    public String login(JSONObject jsonObject) {
-        String name = (String) jsonObject.get("userName");
-        String pass = (String) jsonObject.get("password");
-        if (StringTools.isEmpty(name) || StringTools.isEmpty(pass)) {
+    public String login(RequestInfo requestInfo) {
+        JSONObject jsonObject = JSONObject.parseObject(requestInfo.getJsonString());
+        String userName = jsonObject.getString("account");
+        String passWord = jsonObject.getString("password");
+
+        if (StringTools.isEmpty(userName) || StringTools.isEmpty(passWord)) {
             return JSONObject.toJSONString("用户密码不能为空");
         }
         try {
-//            User user = new User(name, "1", true);
-//            // 手动在db里面配置新增用户
-//            User userInfo = userMapper.selectBySelectiveFields(user);
-//            if (userInfo == null) {
-//                return JSONObject.toJSONString(ServiceUtil.returnError("用户名不存在!"));
-//            }
-//            Boolean status = DomainUtil.checkDomain("CORP\\" + name, pass);
-//            if (status) {
-//                String jwtToken = JwtUtil.createJWT(userInfo.getUserName(), userInfo.getId());
-//                JSONObject data = new JSONObject();
-//                data.put("jwtToken", jwtToken);
-//                data.put("roleId", userMapper.getUserRole(userInfo.getId()));
-//                return JSONObject.toJSONString(ServiceUtil.returnSuccessData(data));
-//            } else {
-//                return JSONObject.toJSONString(ServiceUtil.returnError("用户名或者密码错误!"));
-//            }
+            User user = (User) commonService.requestService(requestInfo);
+            if (user == null) {
+                return JSONObject.toJSONString(JSONObject.toJSONString("用户不存在"));
+            }
+            if (user.getAccount().equals(userName) && user.getPassword().equals(passWord)) {
+                String jwtToken = JwtUtil.createJWT(user.getAccount(), user.getUuid());
+                JSONObject data = new JSONObject();
+                data.put("jwtToken", jwtToken);
+                data.put("roleId", user.getUuid());
+                return JSONObject.toJSONString(data);
+            }
         } catch (Exception e) {
             return "Error";
         }
-        return "";
+        return "Error";
     }
 
 

@@ -72,13 +72,6 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             CommonSelectForm form = JSONObject.parseObject(replace, CommonSelectForm.class);
             //取一定量的数量 返回
             List<Object> objects = baseMapper.commonSelectList(form, basePageInfo);
-
-            for (Object o:objects
-                 ) {
-                HashMap hashMap=(HashMap)o;
-            }
-
-
             return objects;
         }
 
