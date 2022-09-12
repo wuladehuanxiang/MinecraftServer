@@ -5,7 +5,7 @@ package moudle.controller;
 import moudle.common.base.RequestMessage;
 import moudle.common.base.RespResult;
 import moudle.common.enums.RespCodeEnum;
-import moudle.entity.User;
+import moudle.entity.SysUser;
 import moudle.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,9 +52,9 @@ public class UserController {
      */
     //@ApiOperation(value = "新增用户")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public RespResult<User> add(@Valid @RequestBody RequestMessage<User> message) {
+    public RespResult<SysUser> add(@Valid @RequestBody RequestMessage<SysUser> message) {
 
-        User user = this.userService.addUser(message.getContent());
-        return RespResult.succeed(user, RespCodeEnum.SUCCESS.getMessage());
+        SysUser sysUser = this.userService.addUser(message.getContent());
+        return RespResult.succeed(sysUser, RespCodeEnum.SUCCESS.getMessage());
     }
 }

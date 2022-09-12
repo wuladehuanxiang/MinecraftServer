@@ -5,11 +5,10 @@ import moudle.common.base.RequestMessage;
 import moudle.common.base.RespResult;
 import moudle.common.enums.RespCodeEnum;
 import moudle.entity.RequestInfo;
-import moudle.entity.User;
+import moudle.entity.SysUser;
 import moudle.service.CommonService;
 import moudle.utils.JwtUtil;
 import moudle.utils.StringTools;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author: wula
@@ -102,15 +100,15 @@ public class CommonController {
             return JSONObject.toJSONString("用户密码不能为空");
         }
         try {
-            User user = (User) commonService.requestService(requestInfo);
-            if (user == null) {
+            SysUser sysUser = (SysUser) commonService.requestService(requestInfo);
+            if (sysUser == null) {
                 return JSONObject.toJSONString(JSONObject.toJSONString("用户不存在"));
             }
-            if (user.getAccount().equals(userName) && user.getPassword().equals(passWord)) {
-                String jwtToken = JwtUtil.createJWT(user.getAccount(), user.getUuid());
+            if (sysUser.getAccount().equals(userName) && sysUser.getPassword().equals(passWord)) {
+                String jwtToken = JwtUtil.createJWT(sysUser.getAccount(), sysUser.getUuid());
                 JSONObject data = new JSONObject();
                 data.put("jwtToken", jwtToken);
-                data.put("roleId", user.getUuid());
+                data.put("roleId", sysUser.getUuid());
                 return JSONObject.toJSONString(data);
             }
         } catch (Exception e) {

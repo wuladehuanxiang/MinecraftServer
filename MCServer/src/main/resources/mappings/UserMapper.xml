@@ -3,7 +3,7 @@
 <mapper namespace="moudle.dao.UserMapper">
 
 	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="moudle.entity.User">
+	<resultMap id="BaseResultMap" type="moudle.entity.SysUser">
 		<id column="uuid" property="uuid" />
 		<result column="account" property="account" />
 		<result column="name" property="name" />

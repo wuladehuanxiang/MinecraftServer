@@ -2,21 +2,21 @@ package moudle.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import moudle.common.exceptin.DefaultException;
-import moudle.entity.User;
+import moudle.entity.SysUser;
 
 /**
  * 用户管理服务层
  * @author : Dragon丿Z
  * @date : 2022/09/09 14:20
  */
-public interface UserService extends IService<User> {
+public interface UserService extends IService<SysUser> {
 
     /**
      * 新增用户
-     * @param user
+     * @param sysUser
      * @return
      */
-    public User addUser(User user) throws DefaultException;
+    public SysUser addUser(SysUser sysUser) throws DefaultException;
 
     public boolean login();
 

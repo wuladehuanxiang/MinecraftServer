@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import moudle.common.exceptin.DefaultException;
 import moudle.dao.UserMapper;
-import moudle.entity.User;
+import moudle.entity.SysUser;
 import org.springframework.stereotype.Service;
 
 import moudle.service.UserService;
@@ -21,20 +21,20 @@ import javax.annotation.Resource;
 @Slf4j
 @DS("core")
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements UserService {
 
     @Resource
     private UserMapper userMapper;
 
     @Override
-    public User addUser(User user) {
-        Assert.isNull(user.getUuid(),"UUID不为空");
-        if(user.getUuid() != null){
+    public SysUser addUser(SysUser sysUser) {
+        Assert.isNull(sysUser.getUuid(),"UUID不为空");
+        if(sysUser.getUuid() != null){
             throw new DefaultException("请求失败");
         }
-        userMapper.insert(user);
+        userMapper.insert(sysUser);
         log.info("新增人员成功；");
-        return user;
+        return sysUser;
     }
 
     @Override

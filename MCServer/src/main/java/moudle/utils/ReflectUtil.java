@@ -3,7 +3,7 @@ package moudle.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import moudle.data.StaticData;
-import moudle.entity.User;
+import moudle.entity.SysUser;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -18,6 +18,39 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class ReflectUtil {
+
+
+    /**
+     * 返回字符串中大写字母的个数
+     */
+    public static int count(String str) {
+        return count(str, str.length() - 1, 0);
+    }
+
+    /**
+     * 求字符串中大写字母的个数辅助方法
+     */
+    private static int count(String str, int high, int count) {
+        count = Character.isUpperCase(str.charAt(high)) ? 1 : 0;
+        return high == 0 ? count : (count + count(str, high - 1, count));
+    }
+
+
+    public static String getTableName(String content) {
+        String outPut = content;
+        for (int i = 0; i < content.length(); i++) {
+            char c = content.charAt(i);
+            if (c >= 'A' && c <= 'Z') {
+                String index = c + "";
+                if (i == 0) {
+                    outPut = outPut.replace(index,index.toLowerCase());
+                }
+                outPut = outPut.replace(index,  "_"+index.toLowerCase());
+            }
+        }
+        return outPut;
+
+    }
 
     /**
      * @param className
@@ -61,7 +94,8 @@ public class ReflectUtil {
      * @param className 类名
      * @return 反射获取到的类（已经将其属性置入）
      */
-    public static Object getObjectFJSON(String jsonSTR, String className) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+    public static Object getObjectFJSON(String jsonSTR, String className) throws
+            NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         Class c = null;
 
         if (hasThisClass(className) != null) {
@@ -84,12 +118,12 @@ public class ReflectUtil {
             for (Field field : object.getClass().getDeclaredFields()
             ) {
                 field.setAccessible(true);
-                field.set(object,jsonObject.get(field.getName()).toString());
+                field.set(object, jsonObject.get(field.getName()).toString());
             }
 
-            User user = (User) object;
+            SysUser sysUser = (SysUser) object;
 
-            System.out.println(JSON.toJSON(user).toString());
+            System.out.println(JSON.toJSON(sysUser).toString());
 
         }
         return null;
@@ -196,7 +230,8 @@ public class ReflectUtil {
      * @param recursive
      * @param classes
      */
-    public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive,
+    public static void findAndAddClassesInPackageByFile(String packageName, String packagePath,
+                                                        final boolean recursive,
                                                         Set<Class<?>> classes) {
         // 获取此包的目录 建立一个File
         File dir = new File(packagePath);
@@ -235,4 +270,6 @@ public class ReflectUtil {
             }
         }
     }
+
+
 }

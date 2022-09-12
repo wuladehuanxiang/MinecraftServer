@@ -2,7 +2,7 @@ package moudle.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import moudle.entity.User;
+import moudle.entity.SysUser;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @date : 2022/09/09 14:20
  */
 @Repository
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper extends BaseMapper<SysUser> {
 }

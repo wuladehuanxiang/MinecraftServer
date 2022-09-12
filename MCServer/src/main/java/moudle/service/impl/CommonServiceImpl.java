@@ -36,12 +36,11 @@ import java.util.List;
 public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> implements CommonService {
 
 
-
     //这个地方 请一定记得添加 你需要使用到的MAPPER 否则会获取不到mapper
     @Resource
     private CommonMapper CommonMapper;
     @Resource
-    private UserMapper UserMapper;
+    private UserMapper SysUserMapper;
 
 
     /**
@@ -64,9 +63,14 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             //说明拿了一批数据 那么要拿多少 由他自己定义
             BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
             basePageInfo.setPageNum((basePageInfo.getPageNum() - 1) * basePageInfo.getPageSize());
-
+//            requestInfo.getClassName()
 
             String replace = requestInfo.getJsonString().replace("\\", "");
+
+
+            //这里需要一个表名 那么 我将表名通过字符串工具获取
+            String tableName=ReflectUtil.getTableName(requestInfo.getClassName());
+            log.info(tableName);
 
 
             CommonSelectForm form = JSONObject.parseObject(replace, CommonSelectForm.class);

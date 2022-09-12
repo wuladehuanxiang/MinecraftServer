@@ -1,23 +1,15 @@
 package moudle;
 
-import com.alibaba.fastjson.JSON;
-import moudle.common.base.BasePageInfo;
-import moudle.controller.CommonController;
 import moudle.data.StaticData;
-import moudle.entity.RequestInfo;
-import moudle.entity.User;
-import moudle.service.impl.CommonServiceImpl;
 import moudle.utils.InitUtil;
 import moudle.utils.ReflectUtil;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.UUID;
 
 
 /**

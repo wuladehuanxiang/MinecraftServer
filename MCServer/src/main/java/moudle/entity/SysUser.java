@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 //@ApiModel(value = "用户实体")
 @TableName("sys_user")
-public class User {
+public class SysUser {
     /**
      * uuid
      */
