@@ -11,9 +11,9 @@
             ${form.tableName}
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             <foreach collection="form.params" index="index" item="data" open="" separator="" close="">
-                <!--<if test="data.property != null and data.property != '' ">
+                <if test="data.property != null and data.property != '' ">
                     AND ${data.tableField} = #{data.param}
-                </if>-->
+                </if>
             </foreach>
         </trim>
         <if test="page != null">

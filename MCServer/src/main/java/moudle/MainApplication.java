@@ -33,26 +33,6 @@ public class MainApplication {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
         SpringApplication.run(MainApplication.class, args);
         InitUtil.init();
-
-
-/*        RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setRequestType(RequestInfo.requestType.request.toString());
-        requestInfo.setClassName("User");
-        requestInfo.setJsonString("aaa");
-        requestInfo.setBasePageInfo(new BasePageInfo() {{
-            this.setPageNum(1);
-            this.setPageSize(10);
-        }});
-        System.out.println(JSON.toJSON(requestInfo).toString());
-        System.out.println(JSON.toJSON(new User() {{
-            this.setAccount("492397708");
-            this.setName("wula");
-            this.setPassword("123456");
-            this.setUuid(UUID.randomUUID().toString());
-        }}).toString());
-        ;*/
-
-
 //        ReflectUtil.getObjectFJSON("{\"password\":\"123456\",\"name\":\"wula\",\"uuid\":\"9f9643c3-81c1-4df2-a819-47a3a1262883\",\"account\":\"492397708\"}", "User");
 
         for (Class c : StaticData.allClasses

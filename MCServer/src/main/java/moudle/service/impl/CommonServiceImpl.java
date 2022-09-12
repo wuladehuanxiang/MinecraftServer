@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import moudle.common.base.BasePageInfo;
 import moudle.common.exceptin.DefaultException;
 import moudle.dao.CommonMapper;
+import moudle.dao.UserMapper;
 import moudle.entity.RequestInfo;
 import moudle.entity.form.CommonSelectForm;
 import moudle.service.CommonService;
@@ -33,8 +34,14 @@ import java.util.List;
 @Service
 public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> implements CommonService {
 
+
+
+    //这个地方 请一定记得添加 你需要使用到的MAPPER 否则会获取不到mapper
     @Resource
     private CommonMapper CommonMapper;
+    @Resource
+    private UserMapper UserMapper;
+
 
     /**
      * @param requestInfo
@@ -54,8 +61,12 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (requestInfo.getBasePageInfo() != null && requestInfo.getJsonString() != null) {
             //说明拿了一批数据 那么要拿多少 由他自己定义
             BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
-            basePageInfo.setPageNum((basePageInfo.getPageNum()-1) * basePageInfo.getPageSize());
+            basePageInfo.setPageNum((basePageInfo.getPageNum() - 1) * basePageInfo.getPageSize());
+
+
             String replace = requestInfo.getJsonString().replace("\\", "");
+
+
             CommonSelectForm form = JSONObject.parseObject(replace, CommonSelectForm.class);
             //取一定量的数量 返回
             List<Object> objects = baseMapper.commonSelectList(form, basePageInfo);
@@ -168,19 +179,17 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) == null) {
             throw new DefaultException("不存在此类名，请重新请求");
         }
-        //UUID为空
-        String uuid = (String) getUUID(requestInfo);
-        if (StringUtil.isEmpty(uuid)) {
-            throw new DefaultException("uuid不能为空");
-        }
 
         Object obj = ReflectUtil.getObjectFJSON(requestInfo.getJsonString(), ReflectUtil.hasThisClass(requestInfo.getClassName()));
+
+        String uuid = "";
         for (Field f : obj.getClass().getDeclaredFields()
         ) {
             if (f.getName().equals("uuid")) {
                 f.setAccessible(true);
                 try {
-                    f.set(obj, UUIdUtils.getUUID());
+                    uuid = UUIdUtils.getUUID();
+                    f.set(obj, uuid);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
@@ -188,11 +197,15 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         }
 
         BaseMapper baseMapper = this.getMapper(requestInfo);
+
         baseMapper.insert(obj);
+        if (StringUtil.isEmpty(uuid)) {
+            throw new DefaultException("uuid 生成失败");
+        }
         return baseMapper.selectById(uuid);
     }
 
-    public BaseMapper getMapper(RequestInfo requestInfo){
+    public BaseMapper getMapper(RequestInfo requestInfo) {
         Class mapper = ReflectUtil.hasThisMapper(requestInfo.getClassName() + "Mapper");
         if (mapper == null) {
             throw new DefaultException("反射请求mapper失败，请联系后台管理员");
@@ -201,19 +214,21 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         ) {
             f.setAccessible(true);
             //说明是通用接口里面的 实例化的Mapper
+            System.out.println(requestInfo.getClassName() + "Mapper" + "     " + f.getName());
+
             if ((requestInfo.getClassName() + "Mapper").equals(f.getName())) {
                 f.setAccessible(true);
                 try {
                     return (BaseMapper) f.get(this);
                 } catch (IllegalAccessException e) {
-                    throw new DefaultException("反射请求mapper失败，请联系后台管理员",e);
+                    throw new DefaultException("反射请求mapper失败，请联系后台管理员", e);
                 }
             }
         }
         throw new DefaultException("反射请求mapper失败，请联系后台管理员");
     }
 
-    public static Object getUUID(RequestInfo requestInfo){
+    public static Object getUUID(RequestInfo requestInfo) {
         Object objArray = JSON.parse(requestInfo.getJsonString());
 
         try {
@@ -248,7 +263,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
                 return uuid;
             }
         } catch (IllegalAccessException e) {
-            throw new DefaultException("uuid获取异常",e);
+            throw new DefaultException("uuid获取异常", e);
         }
     }
 }
