@@ -32,4 +32,28 @@ public class CommonSelectForm implements Serializable {
      * 查询参数
      */
     private List<Params> params;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public List<String> getTableFields() {
+        return tableFields;
+    }
+
+    public void setTableFields(List<String> tableFields) {
+        this.tableFields = tableFields;
+    }
+
+    public List<Params> getParams() {
+        return params;
+    }
+
+    public void setParams(List<Params> params) {
+        this.params = params;
+    }
 }

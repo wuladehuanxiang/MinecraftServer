@@ -69,6 +69,7 @@ public class ReflectUtil {
     }
 
     public static Class hasThisMapper(String className) {
+
         for (Class c : StaticData.mapperClasses
         ) {
             String[] args = c.getName().split("\\.");

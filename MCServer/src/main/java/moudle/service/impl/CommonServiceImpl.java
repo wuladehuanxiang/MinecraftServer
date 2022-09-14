@@ -10,12 +10,13 @@ import com.github.pagehelper.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import moudle.common.base.BasePageInfo;
 import moudle.common.exceptin.DefaultException;
-import moudle.dao.CommonMapper;
-import moudle.dao.UserMapper;
+import moudle.dao.*;
 import moudle.entity.RequestInfo;
 import moudle.entity.form.CommonSelectForm;
+import moudle.entity.form.Params;
 import moudle.service.CommonService;
 import moudle.utils.ReflectUtil;
+import moudle.utils.StringTools;
 import moudle.utils.UUIdUtils;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,13 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
     @Resource
     private CommonMapper CommonMapper;
     @Resource
-    private UserMapper SysUserMapper;
+    private SysUserMapper SysUserMapper;
+    @Resource
+    private BmCategoryMapper BmCategoryMapper;
+    @Resource
+    private BmTypeMapper BmTypeMapper;
+    @Resource
+    private BmItemMapper BmItemMapper;
 
 
     /**
@@ -62,20 +69,40 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
 //            BaseMapper baseMapper = this.getMapper(requestInfo);
             //说明拿了一批数据 那么要拿多少 由他自己定义
             BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
+            //为分页设置数值
             basePageInfo.setPageNum((basePageInfo.getPageNum() - 1) * basePageInfo.getPageSize());
-//            requestInfo.getClassName()
+            //生成物体对象
+            Object obj = ReflectUtil.getObjectFJSON(requestInfo.getJsonString(), ReflectUtil.hasThisClass(requestInfo.getClassName()));
+            //生成选取格式
+            CommonSelectForm commonSelectForm = new CommonSelectForm();
+            List<String> field = new ArrayList<>();
+            List<Params> params = new ArrayList<>();
+            //设置表名
+            commonSelectForm.setTableName(ReflectUtil.getTableName(requestInfo.getClassName()));
+            //设置查询参数
+            for (Field fieldName : obj.getClass().getDeclaredFields()
+            ) {
+                //遍历所有属性判断是否需要进行加入判断条件
+                fieldName.setAccessible(true);
+                field.add(fieldName.getName());
+                params.add(new Params() {{
+                    try {
+                        //若这个地方有值 说明他需要被加入查询条件
+                        if (fieldName.get(obj) != null) {
+                            this.setParam(fieldName.get(obj).toString());
+                            this.setProperty(fieldName.getName());
+                            this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
 
-            String replace = requestInfo.getJsonString().replace("\\", "");
-
-
-            //这里需要一个表名 那么 我将表名通过字符串工具获取
-            String tableName=ReflectUtil.getTableName(requestInfo.getClassName());
-            log.info(tableName);
-
-
-            CommonSelectForm form = JSONObject.parseObject(replace, CommonSelectForm.class);
+                }});
+            }
+            commonSelectForm.setParams(params);
+            commonSelectForm.setTableFields(field);
             //取一定量的数量 返回
-            List<Object> objects = baseMapper.commonSelectList(form, basePageInfo);
+            List<Object> objects = baseMapper.commonSelectList(commonSelectForm, basePageInfo);
             return objects;
         }
 
@@ -204,11 +231,24 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
 
         BaseMapper baseMapper = this.getMapper(requestInfo);
 
-        baseMapper.insert(obj);
+        int out = baseMapper.insert(obj);
         if (StringUtil.isEmpty(uuid)) {
             throw new DefaultException("uuid 生成失败");
         }
-        return baseMapper.selectById(uuid);
+        System.out.println(out);
+        return obj;
+    }
+
+    @Override
+    public Object verificationService(RequestInfo requestInfo) throws DefaultException {
+        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.verification.toString())) {
+            throw new DefaultException("接口请求错误,此接口为验证专用");
+        }
+        Class mapper = ReflectUtil.hasThisMapper(requestInfo.getClassName() + "Mapper");
+        if (mapper == null) {
+            throw new DefaultException("反射请求mapper失败，请联系后台管理员");
+        }
+        return null;
     }
 
     public BaseMapper getMapper(RequestInfo requestInfo) {

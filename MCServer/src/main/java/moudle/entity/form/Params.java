@@ -28,4 +28,28 @@ public class Params implements Serializable {
      * 查询参数
      */
     private String param;
+
+    public String getTableField() {
+        return tableField;
+    }
+
+    public void setTableField(String tableField) {
+        this.tableField = tableField;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param;
+    }
 }

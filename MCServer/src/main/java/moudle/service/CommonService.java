@@ -15,20 +15,22 @@ public interface CommonService {
 
     /**
      * @param requestInfo
-     * @return  更新的服务
+     * @return 更新的服务
      */
     public Object updateService(RequestInfo requestInfo) throws DefaultException;
 
     /**
      * @param requestInfo
-     * @return  移除的服务
+     * @return 移除的服务
      */
     public Object deleteService(RequestInfo requestInfo) throws DefaultException;
 
     /**
      * @param requestInfo
-     * @return  创建的服务
+     * @return 创建的服务
      */
     public Object createService(RequestInfo requestInfo) throws DefaultException;
+
+    public Object verificationService(RequestInfo requestInfo) throws DefaultException;
 
 }

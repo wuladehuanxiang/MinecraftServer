@@ -27,7 +27,7 @@ import javax.validation.Valid;
 public class CommonController {
 
     @Resource
-    private CommonService commonService;
+    private CommonService CommonService;
 
     /**
      * 新增实例
@@ -51,7 +51,7 @@ public class CommonController {
     //@ApiOperation(value = "新增服务")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public RespResult add(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        return RespResult.succeed(this.commonService.createService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
+        return RespResult.succeed(this.CommonService.createService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -63,7 +63,7 @@ public class CommonController {
     //@ApiOperation(value = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public RespResult delete(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        return RespResult.succeed(this.commonService.deleteService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
+        return RespResult.succeed(this.CommonService.deleteService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -75,7 +75,7 @@ public class CommonController {
     //@ApiOperation(value = "更新")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public RespResult update(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        return RespResult.succeed(this.commonService.updateService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
+        return RespResult.succeed(this.CommonService.updateService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -86,8 +86,14 @@ public class CommonController {
      */
     //@ApiOperation(value = "查询")
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public RespResult RespResult(@Valid @RequestBody RequestMessage<RequestInfo> message) {
-        return RespResult.succeed(this.commonService.requestService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
+    public RespResult request(@Valid @RequestBody RequestMessage<RequestInfo> message) {
+        return RespResult.succeed(this.CommonService.requestService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
+    }
+
+
+    @RequestMapping(value = "/verification", method = RequestMethod.POST)
+    public RespResult verification(@Valid @RequestBody RequestMessage<RequestInfo> message) {
+        return RespResult.succeed(this.CommonService.requestService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
 
@@ -100,7 +106,7 @@ public class CommonController {
             return JSONObject.toJSONString("用户密码不能为空");
         }
         try {
-            SysUser sysUser = (SysUser) commonService.requestService(requestInfo);
+            SysUser sysUser = (SysUser) CommonService.requestService(requestInfo);
             if (sysUser == null) {
                 return JSONObject.toJSONString(JSONObject.toJSONString("用户不存在"));
             }
