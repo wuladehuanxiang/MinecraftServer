@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import moudle.common.base.BaseEntity;
 
 /**
  * 用户实体
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 //@ApiModel(value = "用户实体")
 @TableName("sys_user")
-public class SysUser {
+public class SysUser extends BaseEntity<SysUser> {
     /**
      * uuid
      */

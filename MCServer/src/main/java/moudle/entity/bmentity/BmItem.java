@@ -1,35 +1,42 @@
 package moudle.entity.bmentity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import moudle.common.base.BaseEntity;
+
 /**
  * @author: wula
  * @date: 2022/09/12
  * 物品的描述
  */
-public class BmItem {
-
-
-    /**
-     * 名称
-     */
-
-    private String name;
+@TableName("bm_item")
+public class BmItem extends BaseEntity<BmItem> {
 
     /**
      * 唯一标识符
      */
 
+    @TableId(value = "uuid",type = IdType.ASSIGN_UUID)
     private String uuid;
+
+    /**
+     * 名称
+     */
+    @TableField("name")
+    private String name;
 
     /**
      * 图片
      */
-
+    @TableField("image")
     private String image;
 
     /**
      * 描述
      */
-
+    @TableField("description")
     private String description;
 
 
@@ -37,24 +44,25 @@ public class BmItem {
     /**
      * 属性
      */
-
+    @TableField("attributes")
     private String attributes;
 
     /**
      * 组成
      */
-
+    @TableField("consist")
     private String consist;
 
     /**
      * 区域
      */
-
+    @TableField("region")
     private String region;
 
     /**
      * 战利品
      */
+    @TableField("spoils")
     private String spoils;
 
 
