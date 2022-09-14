@@ -18,7 +18,7 @@ public class BmItem extends BaseEntity<BmItem> {
      * 唯一标识符
      */
 
-    @TableId(value = "uuid",type = IdType.ASSIGN_UUID)
+    @TableId(value = "uuid", type = IdType.ASSIGN_UUID)
     private String uuid;
 
     /**
@@ -26,6 +26,18 @@ public class BmItem extends BaseEntity<BmItem> {
      */
     @TableField("name")
     private String name;
+
+    /**
+     * 板块的UUID
+     */
+    @TableField("category_uuid")
+    private String categoryUuid;
+
+    /**
+     * 所属种类的UUID
+     */
+    @TableField("type_uuid")
+    private String typeUuid;
 
     /**
      * 图片

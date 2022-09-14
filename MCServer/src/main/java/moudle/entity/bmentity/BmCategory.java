@@ -30,7 +30,7 @@ public class BmCategory extends BaseEntity<BmCategory> {
      * 图标
      */
 //    @TableField("image")
-//    private String image;
+    private String image;
 
     //这个类下面 会有很多小类 ->BmType
 }

@@ -26,6 +26,13 @@ public class BmType extends BaseEntity<BmType> {
     private String name;
 
     /**
+     * 所属种类的uuid
+     */
+    @TableField("category_uuid")
+    private String categoryUuid;
+
+
+    /**
      * 图标
      */
     @TableField("icon")
