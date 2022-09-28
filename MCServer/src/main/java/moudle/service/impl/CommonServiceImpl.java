@@ -235,7 +235,6 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (StringUtil.isEmpty(uuid)) {
             throw new DefaultException("uuid 生成失败");
         }
-        System.out.println(out);
         return obj;
     }
 
@@ -248,7 +247,47 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (mapper == null) {
             throw new DefaultException("反射请求mapper失败，请联系后台管理员");
         }
-        return null;
+
+        Object obj = ReflectUtil.getObjectFJSON(requestInfo.getJsonString(), ReflectUtil.hasThisClass(requestInfo.getClassName()));
+        CommonSelectForm commonSelectForm = new CommonSelectForm();
+        List<String> field = new ArrayList<>();
+        List<Params> params = new ArrayList<>();
+        //设置表名
+        commonSelectForm.setTableName(ReflectUtil.getTableName(requestInfo.getClassName()));
+        //设置查询参数
+        for (Field fieldName : obj.getClass().getDeclaredFields()
+        ) {
+            //遍历所有属性判断是否需要进行加入判断条件
+            fieldName.setAccessible(true);
+            field.add(fieldName.getName());
+            params.add(new Params() {{
+                try {
+                    //若这个地方有值 说明他需要被加入查询条件
+                    if (fieldName.get(obj) != null) {
+                        this.setParam(fieldName.get(obj).toString());
+                        this.setProperty(fieldName.getName());
+                        this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }});
+        }
+        commonSelectForm.setParams(params);
+        commonSelectForm.setTableFields(field);
+        //取一定量的数量 返回
+        BasePageInfo basePageInfo = new BasePageInfo() {{
+            this.setPageSize(1);
+            this.setPageNum(1);
+        }};
+        List<Object> objects = baseMapper.commonSelectList(commonSelectForm, basePageInfo);
+        if (objects.size() == 1) {
+            return true;
+        } else {
+            return null;
+
+        }
     }
 
     public BaseMapper getMapper(RequestInfo requestInfo) {

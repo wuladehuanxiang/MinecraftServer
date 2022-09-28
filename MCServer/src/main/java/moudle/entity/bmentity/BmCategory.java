@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import moudle.common.base.BaseEntity;
 
 /**
@@ -12,6 +15,9 @@ import moudle.common.base.BaseEntity;
  * 这个类 是所有要展示的目录大类
  **/
 @TableName("bm_category")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BmCategory extends BaseEntity<BmCategory> {
 
     /**

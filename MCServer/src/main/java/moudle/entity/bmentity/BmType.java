@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import moudle.common.base.BaseEntity;
 
 /**
@@ -11,12 +14,15 @@ import moudle.common.base.BaseEntity;
  * @date: 2022/09/12
  **/
 @TableName("bm_type")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BmType extends BaseEntity<BmType> {
 
     /**
      * 唯一标识符
      */
-    @TableId(value = "uuid",type = IdType.ASSIGN_UUID)
+    @TableId(value = "uuid", type = IdType.ASSIGN_UUID)
     private String uuid;
 
     /**
