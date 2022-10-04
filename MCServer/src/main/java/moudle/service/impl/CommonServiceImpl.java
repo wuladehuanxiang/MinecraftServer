@@ -15,6 +15,7 @@ import moudle.entity.form.CommonSelectForm;
 import moudle.entity.form.Params;
 import moudle.service.CommonService;
 import moudle.utils.ReflectUtil;
+import moudle.utils.StringTools;
 import moudle.utils.UUIdUtils;
 import org.springframework.stereotype.Service;
 
@@ -84,8 +85,9 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
                 field.add(fieldName.getName());
                 params.add(new Params() {{
                     try {
+                        System.out.println(fieldName.get(obj).toString());
                         //若这个地方有值 说明他需要被加入查询条件
-                        if (fieldName.get(obj) != null) {
+                        if (fieldName.get(obj) != null&& !StringTools.isEmpty(fieldName.get(obj).toString())) {
                             this.setParam(fieldName.get(obj).toString());
                             this.setProperty(fieldName.getName());
                             this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
@@ -232,7 +234,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (StringUtil.isEmpty(uuid)) {
             throw new DefaultException("uuid 生成失败");
         }
-        return obj;
+        return out;
     }
 
     @Override

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="isRouterAlive">
+  <div id="app" v-if="isRouterAlive" class="main" >
     <keep-alive>
       <router-view> </router-view>
     </keep-alive>
@@ -27,4 +27,10 @@ export default {
 };
 </script>
 <style scoped>
+.main {
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-image: url("./lib/images/ElvenCastle.png");
+  background-repeat: no-repeat;
+}
 </style>
