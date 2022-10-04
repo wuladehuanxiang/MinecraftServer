@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height:100%;  overflow: hidden;">
     <Header1> </Header1>
     <Home v-show="showingContet == 'Home'"></Home>
     <Atlas v-show="showingContet == 'Atlas'"></Atlas>
@@ -28,7 +28,6 @@ export default {
     bus.$on("changeViewPage", (res) => {
       //显示应该显示的部分
       this.showingContet = res;
-      
     });
   },
 
@@ -37,7 +36,7 @@ export default {
 
   data() {
     return {
-      showingContet: "Atlas",
+      showingContet: "Home",
     };
   },
   created() {},

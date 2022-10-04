@@ -17,7 +17,7 @@ export default new VueRouter({
     // mode: 'history',
     routes: [{
             path: '/',
-            component: LoginPage1,
+            component: MainPage,
             children: [],
         },
         {

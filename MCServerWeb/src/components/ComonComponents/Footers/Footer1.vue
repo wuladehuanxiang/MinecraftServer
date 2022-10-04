@@ -20,7 +20,7 @@
         <p>你想知道的一切，都可以从这里找到答案</p>
       </div>
     </div>
-    <div class="Other"></div>
+    <!-- <div class="Other"></div> -->
   </div>
 </template>
 
@@ -40,12 +40,12 @@ export default {
 
 <style scoped>
 .foot {
+  width: 100vw;
   height: 30vh;
   background: rgb(0, 0, 0, 0.9);
 }
 
 .footer {
-  float: left;
   height: 20vh;
   width: 100%;
   text-align: center;
@@ -74,7 +74,6 @@ p {
 }
 
 .Other {
-  float: left;
   height: 10vh;
   width: 100%;
 }
