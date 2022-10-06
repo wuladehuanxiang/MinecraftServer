@@ -13,6 +13,7 @@ class BmCategory {
         this.uuid = ""
         this.name = ""
         this.image = ""
+        this.description = ""
     }
 }
 

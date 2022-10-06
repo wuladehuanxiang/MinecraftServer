@@ -23,11 +23,11 @@ public class BmCategory extends BaseEntity<BmCategory> {
     /**
      * 唯一标识符
      */
-    @TableId(value = "uuid",type = IdType.ASSIGN_UUID)
+    @TableId(value = "uuid", type = IdType.ASSIGN_UUID)
     private String uuid;
 
     /**
-     *  板块名称
+     * 板块名称
      */
     @TableField("name")
     private String name;
@@ -35,9 +35,11 @@ public class BmCategory extends BaseEntity<BmCategory> {
     /**
      * 图标
      */
-//    @TableField("image")
+    @TableField("image")
     private String image;
 
+    @TableField("description")
+    private String description;
     //这个类下面 会有很多小类 ->BmType
 
 
