@@ -34,14 +34,9 @@ export default {
             },
         };
 
-        axios
+        return axios
             .post("http://127.0.0.1:8888/common/delete", MSG)
-            .then((res) => {
-                return res.data;
-            })
-            .catch(function(err) {
-                console.log("err" + err);
-            });
+
     },
     update: function(className, data) {
         var MSG = {
@@ -55,14 +50,9 @@ export default {
             },
         };
 
-        axios
+        return axios
             .post("http://127.0.0.1:8888/common/update", MSG)
-            .then((res) => {
-                return res.data;
-            })
-            .catch(function(err) {
-                console.log("err" + err);
-            });
+
     },
     create: function(className, data) {
         var MSG = {
@@ -77,14 +67,10 @@ export default {
             },
         };
 
-        axios
+
+        return axios
             .post("http://127.0.0.1:8888/common/create", MSG)
-            .then((res) => {
-                return res.data;
-            })
-            .catch(function(err) {
-                console.log("err" + err);
-            });
+
     },
 
 }
