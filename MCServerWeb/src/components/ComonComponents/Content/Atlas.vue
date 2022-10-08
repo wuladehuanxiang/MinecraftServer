@@ -337,6 +337,7 @@ export default {
       Interworking.request("BmCategory", JSON.stringify(bm), 1, 10)
         .then((value) => {
           this.allDiretory = value.data.data;
+          console.log(value.data.data);
         })
         .catch(function (error) {
           console.log(error);
