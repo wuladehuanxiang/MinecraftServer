@@ -1,6 +1,35 @@
 <template>
   <div class="ess">
-    <div class="esscontent"></div>
+    <div class="esscontent">
+      <div
+        class="title"
+        style="
+          float: left;
+          width: 100%;
+          text-align: center;
+          margin: 0;
+          font-size: 3vw;
+          color: rgb(255, 255, 255);
+        "
+      >
+        大哥大嫂过年好 微信还是支付宝？
+      </div>
+
+      <div class="AtlasDiretory">
+        <img
+          src="../../../lib/images/微信.png"
+          alt=""
+          style="height: 100%; width: 100%"
+        />
+      </div>
+      <div class="AtlasDiretory" style="float: right; margin-right: 10vw">
+        <img
+          src="../../../lib/images/支付宝.jpg"
+          style="height: 100%; width: 100%"
+          alt=""
+        />
+      </div>
+    </div>
   </div>
 </template>
     <script>
@@ -61,10 +90,10 @@ export default {
 .AtlasDiretory {
   float: left;
   border-radius: 5px 5px 5px 5px;
-  width: 30vw;
-  height: 30vh;
+  width: 40vh;
+  height: 40vh;
   background-color: rgb(0, 0, 0, 0.4);
-  margin-left: 4vw;
+  margin-left: 10vw;
   margin-top: 5vh;
   margin-bottom: 5vh;
 }

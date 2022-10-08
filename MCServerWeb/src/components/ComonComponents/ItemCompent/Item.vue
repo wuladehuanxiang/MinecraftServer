@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    {{ ItemData.name }}
+  </div>
 </template>
 
 

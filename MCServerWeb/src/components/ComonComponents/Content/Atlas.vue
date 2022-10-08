@@ -1,9 +1,89 @@
 <template>
   <div class="ess clearfix">
+    <!-- 选择与增加类别的部分 -->
+    <div style="width: 5vw; float: left; position: fixed; margin-left: 1vw">
+      <!-- 以触发选择type -->
+
+      <div
+        style="background: rgb(255, 255, 255, 0.2); width: 13vw"
+        v-show="typeDiretoryVis"
+      >
+        <div
+          style="
+            height: 5vh;
+            font-size: 30px;
+            text-align: center;
+            color: rgb(255, 255, 255);
+          "
+        >
+          测试
+        </div>
+        <!-- 只有管理员能看到的增添类别部分 -->
+        <Tooltip
+          content="点击以添加类别"
+          style="float: left; width: 100%"
+          placement="top"
+        >
+          <Button
+            type="info"
+            style="
+              width: 100%;
+              height: 100%;
+              background: rgb(255, 255, 255, 0.2);
+            "
+            @click="editTypeVisible = !editTypeVisible"
+          >
+            <Icon type="ios-add-circle-outline" size="40"
+          /></Button>
+        </Tooltip>
+      </div>
+
+      <Modal
+        v-model="editTypeVisible"
+        :mask-closable="false"
+        :footer-hide="true"
+        width="50"
+      >
+        <div style="height: 50vh; background: blanchedalmond">
+          <!-- 名称 name -->
+          <!-- 内容 content -->
+          <!-- 图标 icon 暂时不写 可以选用图片？将会考虑-->
+          <Input
+            class="title"
+            placeholder="输入类别名称"
+            v-model="newType.name"
+            style="
+              margin-left: 10%;
+              background: rgb(255, 255, 255, 0.2);
+              width: 80%;
+              margin-top: 5vh;
+            "
+          >
+          </Input>
+          <Input
+            class="contentMSG"
+            maxlength="100"
+            show-word-limit
+            type="textarea"
+            :rows="4"
+            v-model="newType.description"
+            placeholder="描述性文字"
+            style="width: 80%; margin-top: 1vh; margin-left: 10%"
+          ></Input>
+
+          <Button
+            type="success"
+            style="width: 80%; margin-top: 5%; margin-left: 10%"
+            @click="createType()"
+            >提交</Button
+          >
+        </div>
+      </Modal>
+    </div>
+
     <div class="esscontent">
-      <!-- 所有的目录 -->
       <div refs="allDiretory" v-show="diretoryVisible">
-        <!-- 管理员才能看到的编辑目录部分 -->
+        <!-- 管理员才能看到的编辑图鉴部分 -->
         <div class="AtlasDiretory">
           <Tooltip content="点击以添加图片" style="float: left" placement="top">
             <div class="innerimg" @click="editImgVisible = !editImgVisible">
@@ -21,6 +101,7 @@
                 style="height: 26vh; width: 20vh; margin-top: 1vh"
               /></div
           ></Tooltip>
+
           <Modal
             v-model="editImgVisible"
             :mask-closable="false"
@@ -72,28 +153,50 @@
             >
           </div>
         </div>
-
+        <!-- 所有的图鉴 -->
         <div
           class="AtlasDiretory"
           v-for="(item, index) in allDiretory"
-          :key="index"
-          @click="clickDiretory(item)"
+          :key="item.uuid"
         >
           <div v-if="allDiretory.length != 0">
-            <div class="innerimg">
+            <div
+              class="innerimg"
+              @click="
+                clickDiretory(item);
+                typeDiretoryVis = !typeDiretoryVis;
+              "
+            >
               <img
                 :src="item.image"
                 style="height: 90%; width: 90%; float: left"
                 alt=""
               />
             </div>
-            <div class="text">
+            <div
+              class="text"
+              @click="
+                clickDiretory(item);
+                typeDiretoryVis = !typeDiretoryVis;
+              "
+            >
               <p class="title">{{ item.name }}</p>
 
               <p class="contentMSG">
                 {{ item.description }}
               </p>
             </div>
+            <Tooltip
+              content="点击删除这个图鉴"
+              style="float: right; width: 10%"
+              placement="top"
+            >
+              <Icon
+                type="ios-close-circle-outline"
+                size="40"
+                @click="deleteDiretory(item.uuid)"
+              />
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -104,7 +207,10 @@
           type="md-return-left"
           size="50"
           style="background: white; margin-left: 3vw"
-          @click="diretoryVisible = !diretoryVisible"
+          @click="
+            diretoryVisible = !diretoryVisible;
+            typeDiretoryVis = !typeDiretoryVis;
+          "
         />
         <div style="width: 70vw">
           <div
@@ -217,6 +323,15 @@ export default {
   },
   components: { Item },
   methods: {
+    //弹出提示信息
+    info(data) {
+      console.log(data.title);
+      this.$Notice.info({
+        title: data.title,
+        desc: data.nodesc ? "提交成功" : data.content,
+      });
+    },
+    //初始化所有的图鉴
     initAllDiregoty: function () {
       var bm = new BmCategory();
       Interworking.request("BmCategory", JSON.stringify(bm), 1, 10)
@@ -227,7 +342,18 @@ export default {
           console.log(error);
         });
     },
+    //初始化此图鉴的所有类别
+    initAllType: function () {},
+
     createDiretory: function () {
+      if (this.newDiretory.name == "" || this.newDiretory.description == "") {
+        this.info({
+          nodesc: false,
+          title: "新图鉴不能为空",
+          content: "请确保所有信息都填写正确",
+        });
+        return;
+      }
       Interworking.create("BmCategory", JSON.stringify(this.newDiretory))
         .then((value) => {
           console.log(value.data);
@@ -236,8 +362,33 @@ export default {
           console.log(error);
         });
     },
+    createType: function () {
+      if (this.newType == {}) {
+      }
+      Interworking.create("BmType", JSON.stringify(this.newType))
+        .then((value) => {
+          console.log(value.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     createItem: function () {
+      if (this.newItem == {}) {
+      }
       Interworking.create("BmItem", JSON.stringify(this.newItem))
+        .then((value) => {
+          console.log(value.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
+    deleteDiretory: function (msg) {
+      var bm=new BmCategory();
+      bm.uuid=msg;
+      Interworking.delete("BmCategory", JSON.stringify(bm))
         .then((value) => {
           console.log(value.data);
         })
@@ -249,9 +400,10 @@ export default {
     clickDiretory: function (data) {
       this.diretoryVisible = false;
       this.watchingDiretory = data;
+      console.log(data);
     },
-    getTypes: function () {},
-    getItems: function () {},
+    getTypes: function (msg) {},
+    getItems: function (msg) {},
 
     chooseEditImg: function (value, selectedData) {
       if (selectedData[selectedData.length - 1].type) {
@@ -269,8 +421,11 @@ export default {
 
   data() {
     return {
-      //是在看图鉴 还是在看里面的内容
+      editImgVisible: false,
+      editTypeVisible: false,
       diretoryVisible: true,
+      //左侧类别可视栏
+      typeDiretoryVis: false,
       //编辑的图片
       showingImg: "",
       //所有图片的树状数据
@@ -278,23 +433,35 @@ export default {
       //选择的图片的数据
       imgValue: [],
       //是否在编辑框显示正在编辑的图片
-      editImgVisible: false,
+
       //新目录的容器
       newDiretory: {
         name: "",
         image: "",
         description: "",
       },
+      newType: {
+        name: "",
+        categoryUuid: "",
+        content: "",
+        icon: "",
+      },
       //新物品的容器
       newItem: {
         name: "",
         image: "",
         description: "",
+        categoryUuid: "",
+        typeUuid: "",
       },
       //缓存所有的目录
       allDiretory: [],
+      //缓存当前看的目录的所有类别
+      allType: [],
       //正在看的目录
       watchingDiretory: {},
+      //正在看的种类
+      watchingType: {},
     };
   },
   created() {},

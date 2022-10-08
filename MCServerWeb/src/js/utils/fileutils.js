@@ -4,7 +4,8 @@ export default {
         var output = [];
         const path = require("path");
         //读取文件的路径 是否遍历文件的子目录 匹配文件正则表达式
-        const files = require.context("../../lib/images");
+        // 
+        const files = require.context('../../lib/images');
         //files(key).default拿到该模块的vue对象
         files.keys().forEach(key => {
             var outArray = key.split(".", 10)[1].split("/", "99");

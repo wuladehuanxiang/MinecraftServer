@@ -186,6 +186,8 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             throw new DefaultException("uuid不能为空");
         }
 
+
+        System.out.println("访问删除接口");
         BaseMapper baseMapper = this.getMapper(requestInfo);
         if (uuid instanceof ArrayList) {
             int index = baseMapper.deleteBatchIds((ArrayList) uuid);
