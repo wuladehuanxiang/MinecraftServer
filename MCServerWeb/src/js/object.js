@@ -19,6 +19,7 @@ class BmCategory {
 
 class BmType {
     constructor() {
+        this.uuid = ""
         this.name = ""
         this.categoryUuid = ""
         this.content = ""
@@ -30,10 +31,16 @@ class BmType {
 
 class BmItem {
     constructor() {
+        this.uuid = ""
+        this.name = ""
         this.categoryUuid = ""
         this.typeUuid = ""
-        this.name = ""
         this.image = ""
+        this.description = ""
+        this.attributes = ""
+        this.consist = ""
+        this.region = ""
+        this.spoils = ""
     }
 }
 
