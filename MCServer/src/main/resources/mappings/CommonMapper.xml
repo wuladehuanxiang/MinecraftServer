@@ -10,6 +10,7 @@
         FROM
             ${form.tableName}
         <trim prefix="WHERE" prefixOverrides="AND | OR">
+            AND del_flag = 0
             <foreach collection="form.params" index="index" item="data" open="" separator="" close="">
                 <if test="data.property != null and data.property != '' ">
                     AND ${data.tableField} = #{data.param}
