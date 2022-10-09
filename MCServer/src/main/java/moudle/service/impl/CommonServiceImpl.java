@@ -63,7 +63,6 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             throw new DefaultException("不存在此类名，请重新请求");
         }
         if (requestInfo.getBasePageInfo() != null && requestInfo.getJsonString() != null) {
-//            BaseMapper baseMapper = this.getMapper(requestInfo);
             //说明拿了一批数据 那么要拿多少 由他自己定义
             BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
             //为分页设置数值
@@ -77,26 +76,23 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             //设置表名
             commonSelectForm.setTableName(ReflectUtil.getTableName(requestInfo.getClassName()));
             //设置查询参数
-
             for (Field fieldName : obj.getClass().getDeclaredFields()
             ) {
                 //遍历所有属性判断是否需要进行加入判断条件
                 fieldName.setAccessible(true);
-                field.add(fieldName.getName());
-                params.add(new Params() {{
-                    try {
-                        System.out.println(fieldName.get(obj).toString());
-                        //若这个地方有值 说明他需要被加入查询条件
-                        if (fieldName.get(obj) != null&& !StringTools.isEmpty(fieldName.get(obj).toString())) {
+                field.add(ReflectUtil.getTableName(fieldName.getName()));
+                try {
+                    if (fieldName.get(obj) != null && !StringTools.isEmpty(fieldName.get(obj).toString())) {
+                        params.add(new Params() {{
+                            //若这个地方有值 说明他需要被加入查询条件
                             this.setParam(fieldName.get(obj).toString());
                             this.setProperty(fieldName.getName());
                             this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
-                        }
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                        }});
                     }
-
-                }});
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
             }
             commonSelectForm.setParams(params);
             commonSelectForm.setTableFields(field);

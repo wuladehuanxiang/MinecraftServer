@@ -14,10 +14,16 @@
             font-size: 30px;
             text-align: center;
             color: rgb(255, 255, 255);
+            opacity: 0.5;
           "
+          v-for="i in allType"
+          :key="i.uuid"
+          :ref="i.name"
+          @click="changeType(i)"
         >
-          测试
+          {{ i.name }}
         </div>
+
         <!-- 只有管理员能看到的增添类别部分 -->
         <Tooltip
           content="点击以添加类别"
@@ -153,6 +159,7 @@
             >
           </div>
         </div>
+
         <!-- 所有的图鉴 -->
         <div
           class="AtlasDiretory"
@@ -203,6 +210,7 @@
 
       <!-- 选中的展示目录的所有物品与种类 -->
       <div refs="allItems" v-show="!diretoryVisible">
+        <!-- 返回按钮 用以返回图鉴列表 -->
         <Icon
           type="md-return-left"
           size="50"
@@ -212,6 +220,8 @@
             typeDiretoryVis = !typeDiretoryVis;
           "
         />
+
+        <!-- 这个图鉴的描述 -->
         <div style="width: 70vw">
           <div
             style="
@@ -237,72 +247,163 @@
           </div>
         </div>
 
-        <div class="AtlasDiretory">
-          <Tooltip content="点击以添加图片" style="float: left" placement="top">
-            <div class="innerimg" @click="editImgVisible = !editImgVisible">
-              <Icon
-                v-show="showingImg == ''"
-                class="editIcon"
-                type="ios-add-circle-outline"
-                style="float: left; margin-top: 50%"
-                size="50"
-              />
+        <!-- 所选类别的物品 -->
+        <div class="AtlasDiretory" style="height: 40vh">
+          <!-- 物品编辑 -->
+          <div>
+            <Tooltip
+              content="点击以添加图片"
+              style="float: left"
+              placement="top"
+            >
+              <div class="innerimg" @click="editImgVisible = !editImgVisible">
+                <Icon
+                  v-show="showingImg == ''"
+                  class="editIcon"
+                  type="ios-add-circle-outline"
+                  style="float: left; margin-top: 50%"
+                  size="50"
+                />
+                <img
+                  :src="showingImg"
+                  v-show="!showingImg == ''"
+                  alt=""
+                  style="height: 26vh; width: 20vh; margin-top: 1vh"
+                /></div
+            ></Tooltip>
+            <Modal
+              v-model="editImgVisible"
+              :mask-closable="false"
+              :footer-hide="true"
+              width="50"
+            >
+              <div style="width: 25vw; float: left">
+                <Cascader
+                  :data="imgTree"
+                  v-model="imgValue"
+                  @on-change="chooseEditImg"
+                  style="width: 10vw"
+                />
+              </div>
+
+              <div style="">
+                <img
+                  :src="showingImg"
+                  alt=""
+                  style="height: 40vh; width: 45vh"
+                />
+              </div>
+            </Modal>
+            <div class="text" style="margin-left: 1vw">
+              <Input
+                class="title"
+                placeholder="输入新物品名称"
+                v-model="newItem.name"
+                style="
+                  margin-left: 0;
+                  background: rgb(255, 255, 255, 0.2);
+                  width: 100%;
+                  margin-bottom: 1vh;
+                "
+              >
+              </Input>
+              <Input
+                maxlength="100"
+                show-word-limit
+                type="textarea"
+                :rows="2"
+                v-model="newItem.description"
+                placeholder="描述性文字"
+                style="width: 100%; margin-bottom: 1vh"
+              ></Input>
+              <Input
+                class="title"
+                placeholder="属性(如果是装备或者消耗品)"
+                v-model="newItem.attributes"
+                style="
+                  margin-left: 0;
+                  background: rgb(255, 255, 255, 0.2);
+                  width: 100%;
+                  margin-bottom: 1vh;
+                "
+              >
+              </Input>
+              <Input
+                class="title"
+                placeholder="组成(如果是合成的物品)"
+                v-model="newItem.consist"
+                style="
+                  margin-left: 0;
+                  background: rgb(255, 255, 255, 0.2);
+                  width: 100%;
+                  margin-bottom: 1vh;
+                "
+              >
+              </Input>
+              <Input
+                class="title"
+                placeholder="产出区域(所在区域)"
+                v-model="newItem.region"
+                style="
+                  margin-left: 0;
+                  background: rgb(255, 255, 255, 0.2);
+                  width: 100%;
+                  margin-bottom: 1vh;
+                "
+              >
+              </Input>
+              <Input
+                class="title"
+                placeholder="产出战利品(如果是怪物的话)"
+                v-model="newItem.spoils"
+                style="
+                  margin-left: 0;
+                  background: rgb(255, 255, 255, 0.2);
+                  width: 100%;
+                  margin-bottom: 1vh;
+                "
+              >
+              </Input>
+
+              <Button
+                type="primary"
+                @click="createItem()"
+                style="margin-top: 1vh; margin-left: 40%"
+                >提交</Button
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- 展示所有物品 -->
+        <div
+          v-for="item in allItem"
+          :key="item.uuid"
+          class="AtlasDiretory"
+          style="float: left"
+        >
+          <div>
+            <div class="innerimg">
               <img
-                :src="showingImg"
-                v-show="!showingImg == ''"
+                :src="item.image"
+                style="height: 90%; width: 90%; float: left"
                 alt=""
-                style="height: 26vh; width: 20vh; margin-top: 1vh"
-              /></div
-          ></Tooltip>
-          <Modal
-            v-model="editImgVisible"
-            :mask-closable="false"
-            :footer-hide="true"
-            width="50"
-          >
-            <div style="width: 25vw; float: left">
-              <Cascader
-                :data="imgTree"
-                v-model="imgValue"
-                @on-change="chooseEditImg"
-                style="width: 10vw"
               />
             </div>
+            <div class="text">
+              <p class="title">{{ item.name }}</p>
 
-            <div style="">
-              <img :src="showingImg" alt="" style="height: 40vh; width: 45vh" />
+              <p class="contentMSG">
+                {{ item.description }}
+              </p>
             </div>
-          </Modal>
-          <div class="text" style="margin-left: 1vw">
-            <Input
-              class="title"
-              placeholder="输入新物品名称"
-              v-model="newItem.name"
-              style="
-                margin-left: 0;
-                margin-bottom: -10%;
-                background: rgb(255, 255, 255, 0.2);
-                width: 100%;
-              "
+            <Tooltip
+              content="点击删除这个图鉴"
+              style="float: right; width: 10%"
+              placement="top"
             >
-            </Input>
-            <Input
-              class="contentMSG"
-              maxlength="100"
-              show-word-limit
-              type="textarea"
-              :rows="4"
-              v-model="newItem.description"
-              placeholder="描述性文字"
-              style="width: 100%"
-            ></Input>
-
-            <Button
-              type="primary"
-              @click="createDiretory()"
-              style="margin-top: 1vh; margin-left: 40%"
-              >提交</Button
-            >
+              <Icon type="ios-close-circle-outline" size="40" />
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -313,7 +414,7 @@
 import Item from "../ItemCompent/Item.vue";
 import fileutile from "../../../js/utils/fileutils.js";
 import Interworking from "../../../js/utils/Interworking";
-import { BmCategory } from "../../../js/object.js";
+import { BmCategory, BmType, BmItem } from "../../../js/object.js";
 
 export default {
   name: "Atlas",
@@ -337,7 +438,6 @@ export default {
       Interworking.request("BmCategory", JSON.stringify(bm), 1, 10)
         .then((value) => {
           this.allDiretory = value.data.data;
-          console.log(value.data.data);
         })
         .catch(function (error) {
           console.log(error);
@@ -357,54 +457,141 @@ export default {
       }
       Interworking.create("BmCategory", JSON.stringify(this.newDiretory))
         .then((value) => {
-          console.log(value.data);
+          initAllDiregoty();
+          this.info({
+            nodesc: false,
+            title: "成功",
+            content: "成功添加" + this.newDiretory.name,
+          });
         })
         .catch(function (error) {
-          console.log(error);
+          this.info({
+            nodesc: false,
+            title: "错误",
+            content: error,
+          });
         });
     },
     createType: function () {
-      if (this.newType == {}) {
+      //msg 为category
+      var bt = new BmType();
+      bt.categoryUuid = this.watchingDiretory.uuid;
+      bt.name = this.newType.name;
+      bt.content = this.newType.content;
+      if (bt.categoryUuid == "") {
+        this.info({
+          nodesc: false,
+          title: "新类别不能为空",
+          content: "请确保所有信息都填写正确",
+        });
+        return;
       }
-      Interworking.create("BmType", JSON.stringify(this.newType))
+      Interworking.create("BmType", JSON.stringify(bt))
         .then((value) => {
-          console.log(value.data);
+          this.getTypes(this.watchingDiretory);
+          this.info({
+            nodesc: false,
+            title: "成功",
+            content: "成功添加" + this.newType.name,
+          });
+          this.editTypeVisible = false;
         })
         .catch(function (error) {
-          console.log(error);
+          this.info({
+            nodesc: false,
+            title: "错误",
+            content: error,
+          });
         });
     },
     createItem: function () {
-      if (this.newItem == {}) {
+      this.newItem.categoryUuid = this.watchingDiretory.uuid;
+      this.newItem.typeUuid = this.watchingType.uuid;
+
+      if (this.newItem.categoryUuid == "" || this.newItem.typeUuid == "") {
+        this.info({
+          nodesc: false,
+          title: "类别ID 和图鉴ID均不能为空",
+          content: "请确保所有信息都填写正确",
+        });
+        return;
       }
+
       Interworking.create("BmItem", JSON.stringify(this.newItem))
         .then((value) => {
+          this.allItem = value.data.data;
           console.log(value.data);
         })
         .catch(function (error) {
-          console.log(error);
+          this.info({
+            nodesc: false,
+            title: "错误",
+            content: error,
+          });
         });
     },
 
     deleteDiretory: function (msg) {
-      var bm=new BmCategory();
-      bm.uuid=msg;
+      var bm = new BmCategory();
+      bm.uuid = msg;
       Interworking.delete("BmCategory", JSON.stringify(bm))
         .then((value) => {
-          console.log(value.data);
+          this.initAllDiregoty();
+          this.info({
+            nodesc: false,
+            title: "成功",
+            content: "已删除" + msg.title,
+          });
         })
         .catch(function (error) {
-          console.log(error);
+          this.info({
+            nodesc: false,
+            title: "错误",
+            content: error,
+          });
+          this.editTypeVisible = false;
         });
     },
     //点击图鉴触发的方法
     clickDiretory: function (data) {
       this.diretoryVisible = false;
       this.watchingDiretory = data;
-      console.log(data);
+      this.getTypes(data);
     },
-    getTypes: function (msg) {},
-    getItems: function (msg) {},
+    getTypes: function (msg) {
+      var bt = new BmType();
+      bt.categoryUuid = msg.uuid;
+      Interworking.request("BmType", JSON.stringify(bt), 1, 20)
+        .then((value) => {
+          this.allType = value.data.data;
+          if (this.allType.length != 0) {
+            this.watchingType = this.allType[0];
+            this.allItem = this.getItems();
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    getItems: function () {
+      this.newItem.categoryUuid = this.watchingDiretory.uuid;
+      this.newItem.typeUuid = this.watchingType.uuid;
+      if (this.newItem.categoryUuid == "" || this.newItem.typeUuid == "") {
+        this.info({
+          nodesc: false,
+          title: "类别ID 和图鉴ID均不能为空",
+          content: "请确保所有信息都填写正确",
+        });
+      }
+      Interworking.request("BmItem", JSON.stringify(this.newItem), 1, 20)
+        .then((value) => {
+          this.allItem = value.data.data;
+          console.log(this.allItem);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
 
     chooseEditImg: function (value, selectedData) {
       if (selectedData[selectedData.length - 1].type) {
@@ -417,6 +604,14 @@ export default {
         this.newDiretory.image = this.showingImg;
         this.newItem.image = this.showingImg;
       }
+    },
+
+    changeType: function (type) {
+      this.$refs[type.name].style =
+        "  height: 5vh; font-size: 30px;  text-align: center; color: rgb(255, 255, 255); opacity: 0.5; ";
+      this.watchingType = type;
+      this.$refs[this.watchingType.name].style =
+        "  height: 5vh; font-size: 30px;  text-align: center; color: rgb(255, 255, 255); opacity: 1; ";
     },
   },
 
@@ -449,16 +644,22 @@ export default {
       },
       //新物品的容器
       newItem: {
+        uuid: "",
         name: "",
-        image: "",
-        description: "",
         categoryUuid: "",
         typeUuid: "",
+        image: "",
+        description: "",
+        attributes: "",
+        consist: "",
+        region: "",
+        spoils: "",
       },
       //缓存所有的目录
       allDiretory: [],
       //缓存当前看的目录的所有类别
       allType: [],
+      allItem: [],
       //正在看的目录
       watchingDiretory: {},
       //正在看的种类

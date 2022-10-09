@@ -31,7 +31,7 @@ public class BaseEntity<T extends Model<?>> extends Model<T> {
     //@ApiModelProperty(value = "删除状态 0未删除 1已删除")
     @TableField("del_flag")
     @TableLogic
-    private String delFlag="0";
+    private String delFlag;
 
     /**
      * 创建者

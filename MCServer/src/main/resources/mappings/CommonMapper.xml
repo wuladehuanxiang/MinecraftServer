@@ -16,7 +16,6 @@
                     AND ${data.tableField} = #{data.param}
                 </if>
             </foreach>
-            AND del_flag =0
         </trim>
 
         <if test="page != null">
