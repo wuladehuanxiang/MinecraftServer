@@ -4,18 +4,9 @@
     <div style="width: 5vw; float: left; position: fixed; margin-left: 1vw">
       <!-- 以触发选择type -->
 
-      <div
-        style="background: rgb(255, 255, 255, 0.2); width: 13vw"
-        v-show="typeDiretoryVis"
-      >
+      <div style="width: 13vw" v-show="typeDiretoryVis">
         <div
-          style="
-            height: 5vh;
-            font-size: 30px;
-            text-align: center;
-            color: rgb(255, 255, 255);
-            opacity: 0.5;
-          "
+          class="typeStyle"
           v-for="i in allType"
           :key="i.uuid"
           :ref="i.name"
@@ -201,7 +192,7 @@
               <Icon
                 type="ios-close-circle-outline"
                 size="40"
-                @click="deleteDiretory(item.uuid)"
+                @click="deleteDiretory(item)"
               />
             </Tooltip>
           </div>
@@ -247,9 +238,8 @@
           </div>
         </div>
 
-        <!-- 所选类别的物品 -->
+        <!-- 所选类别的物品添加 -->
         <div class="AtlasDiretory" style="height: 40vh">
-          <!-- 物品编辑 -->
           <div>
             <Tooltip
               content="点击以添加图片"
@@ -398,11 +388,15 @@
               </p>
             </div>
             <Tooltip
-              content="点击删除这个图鉴"
+              content="点击删除这个物品"
               style="float: right; width: 10%"
               placement="top"
             >
-              <Icon type="ios-close-circle-outline" size="40" />
+              <Icon
+                type="ios-close-circle-outline"
+                @click="deleteItem(item)"
+                size="40"
+              />
             </Tooltip>
           </div>
         </div>
@@ -425,7 +419,7 @@ export default {
   components: { Item },
   methods: {
     //弹出提示信息
-    info(data) {
+    info:function(data) {
       console.log(data.title);
       this.$Notice.info({
         title: data.title,
@@ -438,6 +432,7 @@ export default {
       Interworking.request("BmCategory", JSON.stringify(bm), 1, 10)
         .then((value) => {
           this.allDiretory = value.data.data;
+          console.log(value.data.data);
         })
         .catch(function (error) {
           console.log(error);
@@ -445,7 +440,11 @@ export default {
     },
     //初始化此图鉴的所有类别
     initAllType: function () {},
-
+    clickDiretory: function (data) {
+      this.diretoryVisible = false;
+      this.watchingDiretory = data;
+      this.getTypes();
+    },
     createDiretory: function () {
       if (this.newDiretory.name == "" || this.newDiretory.description == "") {
         this.info({
@@ -463,15 +462,19 @@ export default {
             title: "成功",
             content: "成功添加" + this.newDiretory.name,
           });
+          this.newDiretory = {};
+          this.showingImg = {};
         })
         .catch(function (error) {
           this.info({
             nodesc: false,
             title: "错误",
-            content: error,
+            content: "错误",
           });
         });
     },
+    //点击图鉴触发的方法
+
     createType: function () {
       //msg 为category
       var bt = new BmType();
@@ -494,13 +497,15 @@ export default {
             title: "成功",
             content: "成功添加" + this.newType.name,
           });
+          this.newType = {};
+          this.showingImg = {};
           this.editTypeVisible = false;
         })
         .catch(function (error) {
           this.info({
             nodesc: false,
             title: "错误",
-            content: error,
+            content: "错误",
           });
         });
     },
@@ -508,6 +513,7 @@ export default {
       this.newItem.categoryUuid = this.watchingDiretory.uuid;
       this.newItem.typeUuid = this.watchingType.uuid;
 
+      console.log(this.newItem);
       if (this.newItem.categoryUuid == "" || this.newItem.typeUuid == "") {
         this.info({
           nodesc: false,
@@ -520,20 +526,27 @@ export default {
       Interworking.create("BmItem", JSON.stringify(this.newItem))
         .then((value) => {
           this.allItem = value.data.data;
-          console.log(value.data);
+          this.info({
+            nodesc: false,
+            title: "成功",
+            content: "添加成功",
+          });
+          this.newItem = {};
+          this.showingImg = {};
+          this.getItems();
         })
         .catch(function (error) {
           this.info({
             nodesc: false,
             title: "错误",
-            content: error,
+            content: "错误",
           });
         });
     },
 
     deleteDiretory: function (msg) {
       var bm = new BmCategory();
-      bm.uuid = msg;
+      bm.uuid = msg.uuid;
       Interworking.delete("BmCategory", JSON.stringify(bm))
         .then((value) => {
           this.initAllDiregoty();
@@ -547,20 +560,55 @@ export default {
           this.info({
             nodesc: false,
             title: "错误",
-            content: error,
+            content: "发生了未知错误请联系管理员",
           });
-          this.editTypeVisible = false;
         });
     },
-    //点击图鉴触发的方法
-    clickDiretory: function (data) {
-      this.diretoryVisible = false;
-      this.watchingDiretory = data;
-      this.getTypes(data);
+    deleteItem: function (msg) {
+      var bm = new BmItem();
+      bm.uuid = msg.uuid;
+      Interworking.delete("BmItem", JSON.stringify(bm))
+        .then((value) => {
+          this.initAllDiregoty();
+          this.info({
+            nodesc: false,
+            title: "成功",
+            content: "已删除" + msg.title,
+          });
+        })
+        .catch(function (error) {
+          this.info({
+            nodesc: false,
+            title: "错误",
+            content: "错误",
+          });
+        });
+      this.getItems();
     },
-    getTypes: function (msg) {
+    deleteType: function (msg) {
+      var bm = new BmType();
+      bm.uuid = msg;
+      Interworking.delete("BmType", JSON.stringify(bm))
+        .then((value) => {
+          this.initAllDiregoty();
+          this.info({
+            nodesc: false,
+            title: "成功",
+            content: "已删除" + msg.title,
+          });
+        })
+        .catch(function (error) {
+          this.info({
+            nodesc: false,
+            title: "错误",
+            content: "错误",
+          });
+        });
+    },
+
+    getTypes: function () {
       var bt = new BmType();
-      bt.categoryUuid = msg.uuid;
+      bt.categoryUuid = this.watchingDiretory.uuid;
       Interworking.request("BmType", JSON.stringify(bt), 1, 20)
         .then((value) => {
           this.allType = value.data.data;
@@ -574,25 +622,30 @@ export default {
         });
     },
     getItems: function () {
-      this.newItem.categoryUuid = this.watchingDiretory.uuid;
-      this.newItem.typeUuid = this.watchingType.uuid;
-      if (this.newItem.categoryUuid == "" || this.newItem.typeUuid == "") {
+      if (
+        this.watchingType.categoryUuid == "" ||
+        this.watchingType.uuid == ""
+      ) {
         this.info({
           nodesc: false,
           title: "类别ID 和图鉴ID均不能为空",
           content: "请确保所有信息都填写正确",
         });
       }
-      Interworking.request("BmItem", JSON.stringify(this.newItem), 1, 20)
+
+      var bm = new BmItem();
+
+      bm.categoryUuid = this.watchingType.category_uuid;
+      bm.typeUuid = this.watchingType.uuid;
+
+      Interworking.request("BmItem", JSON.stringify(bm), 1, 20)
         .then((value) => {
           this.allItem = value.data.data;
-          console.log(this.allItem);
         })
         .catch(function (error) {
           console.log(error);
         });
     },
-
     chooseEditImg: function (value, selectedData) {
       if (selectedData[selectedData.length - 1].type) {
         //展示选择的图片
@@ -600,6 +653,7 @@ export default {
           selectedData[selectedData.length - 1].__label.replace(/\s*/g, "") +
           "." +
           selectedData[selectedData.length - 1].type);
+
         //为图片赋值
         this.newDiretory.image = this.showingImg;
         this.newItem.image = this.showingImg;
@@ -607,11 +661,26 @@ export default {
     },
 
     changeType: function (type) {
-      this.$refs[type.name].style =
-        "  height: 5vh; font-size: 30px;  text-align: center; color: rgb(255, 255, 255); opacity: 0.5; ";
+      // this.$refs[type].style.background
       this.watchingType = type;
-      this.$refs[this.watchingType.name].style =
-        "  height: 5vh; font-size: 30px;  text-align: center; color: rgb(255, 255, 255); opacity: 1; ";
+      this.allItem = this.getItems();
+      // this.$refs[this.watchingType.name].style =
+      //   "  height: 5vh; font-size: 30px;  text-align: center; background:black; opacity: 0.5; ";
+    },
+    convertImgToBase64: function (url, callback, outputFormat) {
+      var canvas = document.createElement("CANVAS"),
+        ctx = canvas.getContext("2d"),
+        img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = function () {
+        canvas.height = img.height;
+        canvas.width = img.width;
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL(outputFormat || "image/png");
+        callback.call(this, dataURL);
+        canvas = null;
+      };
+      img.src = url;
     },
   },
 
@@ -671,6 +740,14 @@ export default {
 </script>
   
   <style scoped>
+.typeStyle {
+  height: 5vh;
+  font-size: 30px;
+  text-align: center;
+  color: black;
+  background: white;
+}
+
 .editIcon {
   width: calc(90%);
   height: calc(90%);

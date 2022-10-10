@@ -17,14 +17,14 @@
 
       <div class="AtlasDiretory">
         <img
-          src="../../../lib/images/微信.png"
+          src="../../../lib/images/other/微信.png"
           alt=""
           style="height: 100%; width: 100%"
         />
       </div>
       <div class="AtlasDiretory" style="float: right; margin-right: 10vw">
         <img
-          src="../../../lib/images/支付宝.jpg"
+          src="../../../lib/images/other/支付宝.jpg"
           style="height: 100%; width: 100%"
           alt=""
         />

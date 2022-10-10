@@ -4,7 +4,7 @@
       <div class="fullitem">
         <div style="width: 60%; height: 100%; float: left">
           <img
-            src="../../../lib/images/VolcanoTown.jpg"
+            src="../../../lib/images/other/VolcanoTown.jpg"
             style="height: 100%; width: 100%"
             alt=""
           />

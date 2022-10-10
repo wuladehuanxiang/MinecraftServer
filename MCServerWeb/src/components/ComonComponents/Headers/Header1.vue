@@ -120,7 +120,7 @@
         class="LogoCardItem"
       >
         <img
-          src="../../../lib/images/logo.png"
+          src="../../../lib/images/other/logo.png"
           alt=""
           style="height: 30vh; width: 45vw"
         />
