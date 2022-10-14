@@ -20,6 +20,7 @@
           content="点击以添加类别"
           style="float: left; width: 100%"
           placement="top"
+          v-show="isadmin"
         >
           <Button
             type="info"
@@ -36,6 +37,7 @@
       </div>
 
       <Modal
+        v-show="isadmin"
         v-model="editTypeVisible"
         :mask-closable="false"
         :footer-hide="true"
@@ -81,7 +83,7 @@
     <div class="esscontent">
       <div refs="allDiretory" v-show="diretoryVisible">
         <!-- 管理员才能看到的编辑图鉴部分 -->
-        <div class="AtlasDiretory">
+        <div class="AtlasDiretory" v-show="isadmin">
           <Tooltip content="点击以添加图片" style="float: left" placement="top">
             <div class="innerimg" @click="editImgVisible = !editImgVisible">
               <Icon
@@ -185,6 +187,7 @@
               </p>
             </div>
             <Tooltip
+              v-show="isadmin"
               content="点击删除这个图鉴"
               style="float: right; width: 10%"
               placement="top"
@@ -239,7 +242,7 @@
         </div>
 
         <!-- 所选类别的物品添加 -->
-        <div class="AtlasDiretory" style="height: 40vh">
+        <div class="AtlasDiretory" style="height: 40vh" v-show="isadmin">
           <div>
             <Tooltip
               content="点击以添加图片"
@@ -383,11 +386,25 @@
             <div class="text">
               <p class="title">{{ item.name }}</p>
 
-              <p class="contentMSG">
+              <p class="contentMSG" style="margin-top: 8vh">
                 {{ item.description }}
+              </p>
+              <p class="contentMSG" style="margin-top: 0">
+                {{ item.attributes }}
+              </p>
+              <p class="contentMSG" style="margin-top: 0">
+                {{ item.consist }}
+              </p>
+              <div v-show="!(item.region == '')">地区:</div>
+              <p class="contentMSG" style="margin-top: 0">
+                {{ item.region }}
+              </p>
+              <p class="contentMSG" style="margin-top: 0">
+                {{ item.spoils }}
               </p>
             </div>
             <Tooltip
+              v-show="isadmin"
               content="点击删除这个物品"
               style="float: right; width: 10%"
               placement="top"
@@ -409,18 +426,24 @@ import Item from "../ItemCompent/Item.vue";
 import fileutile from "../../../js/utils/fileutils.js";
 import Interworking from "../../../js/utils/Interworking";
 import { BmCategory, BmType, BmItem } from "../../../js/object.js";
+import bus from "../../../js/bus.js";
+import Donate from "./Donate.vue";
 
 export default {
   name: "Atlas",
   mounted: function () {
     this.imgTree = fileutile.getAllFile();
     this.initAllDiregoty();
+
+    bus.$on("isadmin", () => {
+      //显示应该显示的部分
+      this.isadmin = true;
+    });
   },
-  components: { Item },
+  components: { Item, Donate },
   methods: {
     //弹出提示信息
-    info:function(data) {
-      console.log(data.title);
+    info: function (data) {
       this.$Notice.info({
         title: data.title,
         desc: data.nodesc ? "提交成功" : data.content,
@@ -432,7 +455,6 @@ export default {
       Interworking.request("BmCategory", JSON.stringify(bm), 1, 10)
         .then((value) => {
           this.allDiretory = value.data.data;
-          console.log(value.data.data);
         })
         .catch(function (error) {
           console.log(error);
@@ -550,11 +572,19 @@ export default {
       Interworking.delete("BmCategory", JSON.stringify(bm))
         .then((value) => {
           this.initAllDiregoty();
-          this.info({
-            nodesc: false,
-            title: "成功",
-            content: "已删除" + msg.title,
-          });
+          if (value.data.data == "1") {
+            this.info({
+              nodesc: false,
+              title: "成功",
+              content: "已删除" + msg.title,
+            });
+          } else {
+            this.info({
+              nodesc: false,
+              title: "失败",
+              content: value.data.data,
+            });
+          }
         })
         .catch(function (error) {
           this.info({
@@ -570,17 +600,25 @@ export default {
       Interworking.delete("BmItem", JSON.stringify(bm))
         .then((value) => {
           this.initAllDiregoty();
-          this.info({
-            nodesc: false,
-            title: "成功",
-            content: "已删除" + msg.title,
-          });
+          if (value.data.data == "1") {
+            this.info({
+              nodesc: false,
+              title: "成功",
+              content: "已删除" + msg.title,
+            });
+          } else {
+            this.info({
+              nodesc: false,
+              title: "失败",
+              content: value.data.data,
+            });
+          }
         })
         .catch(function (error) {
           this.info({
             nodesc: false,
             title: "错误",
-            content: "错误",
+            content: error,
           });
         });
       this.getItems();
@@ -591,11 +629,19 @@ export default {
       Interworking.delete("BmType", JSON.stringify(bm))
         .then((value) => {
           this.initAllDiregoty();
-          this.info({
-            nodesc: false,
-            title: "成功",
-            content: "已删除" + msg.title,
-          });
+          if (value.data.data == "1") {
+            this.info({
+              nodesc: false,
+              title: "成功",
+              content: "已删除" + msg.title,
+            });
+          } else {
+            this.info({
+              nodesc: false,
+              title: "失败",
+              content: value.data.data,
+            });
+          }
         })
         .catch(function (error) {
           this.info({
@@ -686,6 +732,7 @@ export default {
 
   data() {
     return {
+      isadmin: false,
       editImgVisible: false,
       editTypeVisible: false,
       diretoryVisible: true,
@@ -754,10 +801,11 @@ export default {
 }
 
 .contentMSG {
-  margin-top: 8vh;
+  margin-top: 10vh;
   font-weight: 600;
   color: rgb(255, 255, 255);
   font-weight: bold;
+  text-align: center;
 }
 
 .innerimg {

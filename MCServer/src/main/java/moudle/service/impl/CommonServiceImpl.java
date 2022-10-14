@@ -1,5 +1,7 @@
 package moudle.service.impl;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.dynamic.datasource.annotation.DS;
@@ -10,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import moudle.common.base.BasePageInfo;
 import moudle.common.exceptin.DefaultException;
 import moudle.dao.*;
+import moudle.data.StaticData;
 import moudle.entity.RequestInfo;
+import moudle.entity.SysUser;
 import moudle.entity.form.CommonSelectForm;
 import moudle.entity.form.Params;
 import moudle.service.CommonService;
@@ -21,7 +25,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
+import java.sql.Ref;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -62,6 +68,8 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) == null) {
             throw new DefaultException("不存在此类名，请重新请求");
         }
+
+
         if (requestInfo.getBasePageInfo() != null && requestInfo.getJsonString() != null) {
             //说明拿了一批数据 那么要拿多少 由他自己定义
             BasePageInfo basePageInfo = requestInfo.getBasePageInfo();
@@ -78,6 +86,9 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             //设置查询参数
             for (Field fieldName : obj.getClass().getDeclaredFields()
             ) {
+                if (fieldName.getName().equals("password")) {
+                    continue;
+                }
                 //遍历所有属性判断是否需要进行加入判断条件
                 fieldName.setAccessible(true);
                 field.add(ReflectUtil.getTableName(fieldName.getName()));
@@ -86,7 +97,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
                         params.add(new Params() {{
                             //若这个地方有值 说明他需要被加入查询条件
                             this.setParam(fieldName.get(obj).toString());
-                            this.setProperty(fieldName.getName());
+                            this.setProperty(ReflectUtil.getTableName(fieldName.getName()));
                             this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
                         }});
                     }
@@ -137,6 +148,9 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             throw new DefaultException("不存在此类名，请重新请求");
         }
 
+        if (!StpUtil.hasRole("admin")) {
+            return "你没有这个权限";
+        }
         //UUID为空
         Object uuid = getUUID(requestInfo);
 
@@ -175,7 +189,9 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) == null) {
             throw new DefaultException("不存在此类名，请重新请求");
         }
-
+        if (!StpUtil.hasRole("admin")) {
+            return "你没有这个权限";
+        }
         //UUID为空
         Object uuid = getUUID(requestInfo);
         if (uuid == null) {
@@ -183,7 +199,6 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         }
 
 
-        System.out.println("访问删除接口");
         BaseMapper baseMapper = this.getMapper(requestInfo);
         if (uuid instanceof ArrayList) {
             int index = baseMapper.deleteBatchIds((ArrayList) uuid);
@@ -209,9 +224,15 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
         if (ReflectUtil.hasThisClass(requestInfo.getClassName()) == null) {
             throw new DefaultException("不存在此类名，请重新请求");
         }
+        if (!requestInfo.getClassName().equals("SysUser")) {
+            if (!StpUtil.hasRole("admin")) {
+                return "你没有这个权限";
+            }
+        }
 
+
+        //通用逻辑处理
         Object obj = ReflectUtil.getObjectFJSON(requestInfo.getJsonString(), ReflectUtil.hasThisClass(requestInfo.getClassName()));
-
         String uuid = "";
         for (Field f : obj.getClass().getDeclaredFields()
         ) {
@@ -226,13 +247,57 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             }
         }
 
-        BaseMapper baseMapper = this.getMapper(requestInfo);
+        BaseMapper outMapper = this.getMapper(requestInfo);
 
-        int out = baseMapper.insert(obj);
-        if (StringUtil.isEmpty(uuid)) {
-            throw new DefaultException("uuid 生成失败");
+        //特殊逻辑处理
+
+        if (obj instanceof SysUser) {
+            SysUser user = (SysUser) obj;
+
+            BasePageInfo basePageInfo = new BasePageInfo();
+            //为分页设置数值
+            basePageInfo.setPageNum(0);
+            basePageInfo.setPageSize(9);
+            CommonSelectForm commonSelectForm = new CommonSelectForm();
+            commonSelectForm.setTableName("sys_user");
+            List<String> field = new ArrayList<>();
+            List<Params> params = new ArrayList<>();
+            field.add("account");
+            params.add(new Params() {{
+                //若这个地方有值 说明他需要被加入查询条件
+                this.setParam(user.getAccount());
+                this.setProperty("account");
+                this.setTableField("account");
+            }});
+            commonSelectForm.setParams(params);
+            commonSelectForm.setTableFields(field);
+
+            List<Object> objects = baseMapper.commonSelectList(commonSelectForm, basePageInfo);
+
+            if (objects.size() >= 1) {
+
+                if (StringUtil.isEmpty(uuid)) {
+                    throw new DefaultException("uuid 生成失败");
+                }
+                return "此用户已经存在";
+
+            } else {
+                int out = outMapper.insert(obj);
+
+                StpUtil.login(((SysUser) obj).getUuid());
+                StaticData.userRole.put(uuid, "0");
+                StpUtil.checkLogin();
+                return out;
+            }
+        } else {
+            int out = outMapper.insert(obj);
+            if (StringUtil.isEmpty(uuid)) {
+                throw new DefaultException("uuid 生成失败");
+            }
+            return out;
         }
-        return out;
+
+
     }
 
     @Override
@@ -245,46 +310,61 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             throw new DefaultException("反射请求mapper失败，请联系后台管理员");
         }
 
-        Object obj = ReflectUtil.getObjectFJSON(requestInfo.getJsonString(), ReflectUtil.hasThisClass(requestInfo.getClassName()));
-        CommonSelectForm commonSelectForm = new CommonSelectForm();
-        List<String> field = new ArrayList<>();
-        List<Params> params = new ArrayList<>();
-        //设置表名
-        commonSelectForm.setTableName(ReflectUtil.getTableName(requestInfo.getClassName()));
-        //设置查询参数
-        for (Field fieldName : obj.getClass().getDeclaredFields()
-        ) {
-            //遍历所有属性判断是否需要进行加入判断条件
-            fieldName.setAccessible(true);
-            field.add(fieldName.getName());
-            params.add(new Params() {{
-                try {
-                    //若这个地方有值 说明他需要被加入查询条件
-                    if (fieldName.get(obj) != null) {
-                        this.setParam(fieldName.get(obj).toString());
-                        this.setProperty(fieldName.getName());
-                        this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
-                    }
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }});
-        }
-        commonSelectForm.setParams(params);
-        commonSelectForm.setTableFields(field);
-        //取一定量的数量 返回
-        BasePageInfo basePageInfo = new BasePageInfo() {{
-            this.setPageSize(1);
-            this.setPageNum(1);
-        }};
-        List<Object> objects = baseMapper.commonSelectList(commonSelectForm, basePageInfo);
-        if (objects.size() == 1) {
+        if (StpUtil.isLogin()) {
             return true;
-        } else {
-            return null;
-
         }
+
+        Object obj = ReflectUtil.getObjectFJSON(requestInfo.getJsonString(), ReflectUtil.hasThisClass(requestInfo.getClassName()));
+
+        if (obj instanceof SysUser) {
+            CommonSelectForm commonSelectForm = new CommonSelectForm();
+            List<String> field = new ArrayList<>();
+            List<Params> params = new ArrayList<>();
+            //设置表名
+            commonSelectForm.setTableName(ReflectUtil.getTableName(requestInfo.getClassName()));
+            //设置查询参数
+            for (Field fieldName : obj.getClass().getDeclaredFields()
+            ) {
+                //遍历所有属性判断是否需要进行加入判断条件
+                fieldName.setAccessible(true);
+                field.add(fieldName.getName());
+                params.add(new Params() {{
+                    try {
+                        //若这个地方有值 说明他需要被加入查询条件
+                        if (fieldName.get(obj) != null) {
+                            this.setParam(fieldName.get(obj).toString());
+                            this.setProperty(fieldName.getName());
+                            this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }});
+            }
+            commonSelectForm.setParams(params);
+            commonSelectForm.setTableFields(field);
+            //取一定量的数量 返回
+            BasePageInfo basePageInfo = new BasePageInfo() {{
+                this.setPageSize(1);
+                this.setPageNum(0);
+            }};
+            List<Object> objects = baseMapper.commonSelectList(commonSelectForm, basePageInfo);
+            if (objects.size() == 1) {
+                HashMap hashMap = ((HashMap) objects.get(0));
+                String uuid = hashMap.get("uuid").toString();
+                StpUtil.login(uuid);
+                SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
+                StaticData.userRole.put(uuid, hashMap.get("isadmin").toString());
+                return saTokenInfo;
+            } else {
+                return "密码错误或此用户不存在";
+            }
+        } else {
+            return false;
+        }
+
+
     }
 
     public BaseMapper getMapper(RequestInfo requestInfo) {

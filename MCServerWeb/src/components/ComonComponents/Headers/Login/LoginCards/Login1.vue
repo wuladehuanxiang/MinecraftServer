@@ -3,6 +3,12 @@
     <div class="card">
       <div class="cardLeft"></div>
       <div class="cardRight">
+        <Icon
+          type="ios-close-circle-outline"
+          style="float: right"
+          size="30"
+          @click="closeLoginPage()"
+        />
         <!-- 账户名 -->
         <Input
           prefix="ios-contact"
@@ -33,10 +39,15 @@
 
 <script>
 import router from "../../../../../router.js";
+import bus from "../../../../../js/bus.js";
 
+import Interworking from "../../../../../js/utils/Interworking.js";
+import { SysUser } from "../../../../../js/object.js";
 export default {
   name: "LoginAndRegist1",
-  mounted: function () {},
+  mounted: function () {
+    //判断是否登陆
+  },
 
   computed: {
     // 密码强度提示文案等
@@ -71,8 +82,47 @@ export default {
   },
   components: {},
   methods: {
+    closeLoginPage: function () {
+      bus.$emit("closeLoginPage");
+    },
+
     login: function () {
-      router.push("/MainPage");
+      var user = {
+        account: this.User.account,
+        password: this.User.password,
+      };
+      console.log(JSON.stringify(user));
+      Interworking.verification("SysUser", JSON.stringify(user))
+        .then((value) => {
+          if (value.data.data == "密码错误或此用户不存在") {
+            this.$Notice.info({
+              title: "登陆失败",
+              desc: "密码错误或此用户不存在",
+            });
+          } else {
+            if (value.data.data.tokenValue) {
+              localStorage.setItem("satoken", value.data.data.tokenValue);
+              bus.$emit("closeLoginPage");
+              bus.$emit("login");
+            }
+            //若是管理员则需要让图鉴部分编辑部分全部显示
+            Interworking.request("SysUser", JSON.stringify(user), 1, 1)
+              .then((value) => {
+                if (value.data.data) {
+                  if (
+                    value.data.data[0].isadmin &&
+                    value.data.data[0].isadmin == "1"
+                  ) {
+                    bus.$emit("isadmin");
+                  }
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }
+        })
+        .catch(function (error) {});
     },
     onPasswordChange: function (val) {
       this.passwordLen = val.length;
@@ -95,12 +145,16 @@ export default {
 <!-- transform: rotate(40deg); -->
 
 <style scoped>
-
 .card {
+  position: fixed;
+  background: white;
   min-width: 500px;
   min-height: 400px;
+  margin-left: 25vw;
+  margin-top: -30vh;
   width: 50vw;
   height: 50vh;
+  z-index: 4;
 }
 .cardLeft {
   width: 25vw;

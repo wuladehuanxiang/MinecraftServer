@@ -1,8 +1,8 @@
 package moudle;
 
 import moudle.data.StaticData;
+import moudle.entity.SysUser;
 import moudle.utils.InitUtil;
-import moudle.utils.JwtUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,17 +27,10 @@ public class MainApplication {
         SpringApplication.run(MainApplication.class, args);
         InitUtil.init();
 
-        System.out.println();
-        System.out.println(JwtUtil.createJWT("test", "wula"));
-        ;
-
-
         for (
                 Class c : StaticData.allClasses
         ) {
-
             System.out.println(c.getName());
-
         }
 
 

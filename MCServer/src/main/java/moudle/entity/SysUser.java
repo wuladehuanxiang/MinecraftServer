@@ -49,4 +49,9 @@ public class SysUser extends BaseEntity<SysUser> {
     //@ApiModelProperty(value = "密码")
     @TableField("password")
     private String password;
+
+    @TableField("isadmin")
+    private String isadmin;
+
+
 }

@@ -2,45 +2,84 @@
   <div>
     <div class="loginLink">
       <i style="font-size: large; font-style: normal; float: left"
-        >欢迎来到终焉，登陆以加入聊天！</i
+        >欢迎来到终焉</i
       >
+      <i v-show="!hasLogin" style="font-size: large; font-style: normal; float: left"
+        >  ，登陆以加入聊天！</i
+      >
+    
       <Button
         type="primary"
         size="large"
         style="float: left; margin-left: 20%"
-        @click="showLoginCard = true"
+        @click="
+          showLoginCard = true;
+          showing = 'login';
+        "
+        v-show="!hasLogin"
         >登录</Button
       >
 
-      <Button type="warning" size="large" style="float: left; margin-left: 1%"
+      <Button
+        type="warning"
+        size="large"
+        style="float: left; margin-left: 1%"
+        @click="
+          showLoginCard = true;
+          showing = 'register';
+        "
+        v-show="!hasLogin"
         >注册</Button
       >
       <!-- <div class="otherMSG">OtherMSG</div> -->
     </div>
-    <Modal
-      v-model="showLoginCard"
-      footer-hide
-      :transfer="false"
-      width="55vw"
-      id="LoginCard"
-    >
-      <LoginAndRegist1Vue></LoginAndRegist1Vue>
-    </Modal>
+    <div v-show="showLoginCard" width="55vw" class="LoginCard" id="LoginCard">
+      <Login v-show="showing == 'login'"></Login>
+      <Regist v-show="showing == 'register'"></Regist>
+    </div>
   </div>
 </template>
 
 
 <script>
-import LoginAndRegist1Vue from "./LoginCards/Login1.vue";
-
+import Login from "./LoginCards/Login1.vue";
+import Regist from "./RegisterCards/RegistCard.vue";
+import Interworking from "../../../../js/utils/Interworking.js";
+import bus from "../../../../js/bus.js";
+import { copyFileSync } from "fs";
 export default {
   name: "LoginPage1",
-  mounted: function () {},
-  components: { LoginAndRegist1Vue },
+  mounted: function () {
+    bus.$on("closeLoginPage", () => {
+      //显示应该显示的部分
+      this.showLoginCard = false;
+    });
+    bus.$on("login", () => {
+      //显示应该显示的部分
+      this.hasLogin = true;
+    });
+    
+    Interworking.verification("BmCategory", JSON.stringify({}))
+      .then((value) => {
+        if (value.data.data == true) {
+          this.hasLogin = true;
+        } else {
+          this.hasLogin = false;
+          this.$Notice.info({
+            title: "您的登陆已过期",
+            desc: "请重新登陆",
+          });
+        }
+      })
+      .catch(function (error) {});
+  },
+  components: { Login, Regist },
   methods: {},
   data() {
     return {
+      hasLogin: false,
       showLoginCard: false,
+      showing: "login",
     };
   },
 };
@@ -48,9 +87,6 @@ export default {
 <!-- transform: rotate(40deg); -->
 
 <style scoped>
-.ivu-modal-content {
-  background: black;
-}
 .loginLink {
   display: flex;
   justify-content: center;
