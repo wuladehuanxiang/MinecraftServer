@@ -432,6 +432,17 @@ import Donate from "./Donate.vue";
 export default {
   name: "Atlas",
   mounted: function () {
+    var papi = {
+      player: "tank_ice",
+    };
+    Interworking.request("BmPapi", JSON.stringify(papi),1,10)
+      .then((value) => {
+        console.log(value.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     this.imgTree = fileutile.getAllFile();
     this.initAllDiregoty();
 

@@ -52,6 +52,8 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
     private BmTypeMapper BmTypeMapper;
     @Resource
     private BmItemMapper BmItemMapper;
+    @Resource
+    private BmPapiMapper BmPapiMapper;
 
 
     /**
@@ -165,6 +167,12 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             if (uuid instanceof ArrayList) {
                 throw new DefaultException("暂时不支持批量修改");
             } else if (uuid instanceof String) {
+                if(baseMapper.selectById(uuid.toString())!=null)
+                {
+
+                    //若
+                };
+
                 int index = baseMapper.updateById(obj);
                 return index;
             } else {
