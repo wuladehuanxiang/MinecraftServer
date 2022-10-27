@@ -1,4 +1,4 @@
-package module.Filter;
+package module.filter;
 
 /**
  * @author: wula
@@ -36,7 +36,7 @@ public class StpInterfaceImpl implements StpInterface {
     public List<String> getRoleList(Object loginId, String loginType) {
         List<String> list = new ArrayList<String>();
         //从静态缓存取user
-        if (StaticData.userRole.get(loginId).equals("1")) {
+        if ("1".equals(StaticData.userRole.get(loginId))) {
             list.add("admin");
             list.add("super-admin");
         }

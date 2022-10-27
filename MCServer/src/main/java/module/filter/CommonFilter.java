@@ -1,4 +1,4 @@
-package module.Filter;
+package module.filter;
 
 
 import org.springframework.stereotype.Component;
@@ -30,7 +30,7 @@ public class CommonFilter implements Filter {
         res.addHeader("Access-Control-Allow-Origin", req.getHeader("origin"));
         res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
         res.addHeader("Access-Control-Allow-Headers", "satoken ,Content-Type,X-CAF-Authorization-Token,sessionToken,X-TOKEN,customercoderoute,authorization,conntectionid,Cookie,Access-Control-Allow-Credentials");
-        if (((HttpServletRequest) request).getMethod().equals("OPTIONS")) {
+        if ("OPTIONS".equals(((HttpServletRequest) request).getMethod())) {
             response.getWriter().println("ok");
             return;
         }

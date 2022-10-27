@@ -221,7 +221,7 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             commonSelectForm.setTableName(ReflectUtil.getTableName(requestInfo.getClassName()));
             //设置查询参数
             for (Field fieldName : obj.getClass().getDeclaredFields()) {
-                if (fieldName.getName().equals("password")) {
+                if ("password".equals(fieldName.getName())) {
                     continue;
                 }
                 //遍历所有属性判断是否需要进行加入判断条件
