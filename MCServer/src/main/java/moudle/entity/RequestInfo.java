@@ -39,7 +39,8 @@ public class RequestInfo {
          * delete 删除信息
          * create 创建信息
          * verification 验证信息
+         * replace 无则创建 有则更新
          */
-        request, update, delete, create, verification
+        request, update, delete, create, verification,replace
     }
 }

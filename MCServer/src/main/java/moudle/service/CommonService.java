@@ -33,4 +33,6 @@ public interface CommonService {
 
     public Object verificationService(RequestInfo requestInfo) throws DefaultException;
 
+    public Object replaceService(RequestInfo requestInfo) throws DefaultException;
+
 }

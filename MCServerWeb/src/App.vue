@@ -31,7 +31,7 @@ export default {
   height: 100%;
   background-size: 100% 100%;
   background-attachment: fixed;
-  background-image: url("./lib/images/other/ElvenCastle.png");
   background-repeat: no-repeat;
+  background: white;
 }
 </style>

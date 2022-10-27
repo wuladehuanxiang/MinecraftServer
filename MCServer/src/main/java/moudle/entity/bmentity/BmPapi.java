@@ -19,8 +19,6 @@ import moudle.common.base.BaseEntity;
 @AllArgsConstructor
 public class BmPapi extends BaseEntity<BmPapi> {
 
-    @TableId(value = "uuid", type = IdType.ASSIGN_UUID)
-    private String uuid;
 
     @TableField("player")
     private String player;

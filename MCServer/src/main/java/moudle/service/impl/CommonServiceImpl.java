@@ -167,11 +167,11 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
             if (uuid instanceof ArrayList) {
                 throw new DefaultException("暂时不支持批量修改");
             } else if (uuid instanceof String) {
-                if(baseMapper.selectById(uuid.toString())!=null)
-                {
+                if (baseMapper.selectById(uuid.toString()) != null) {
 
                     //若
-                };
+                }
+                ;
 
                 int index = baseMapper.updateById(obj);
                 return index;
@@ -374,6 +374,54 @@ public class CommonServiceImpl extends ServiceImpl<CommonMapper, Object> impleme
 
 
     }
+
+    @Override
+    public Object replaceService(RequestInfo requestInfo) throws DefaultException {
+        //若这个请求不是创建请求
+        if (!requestInfo.getRequestType().equals(RequestInfo.requestType.replace.toString())) {
+            throw new DefaultException("接口请求错误,此接口为replace专用");
+        }
+        if (ReflectUtil.hasThisClass(requestInfo.getClassName()) == null) {
+            throw new DefaultException("不存在此类名，请重新请求");
+        }
+
+        if (!StpUtil.hasRole("admin")) {
+            return "你没有这个权限";
+        }
+
+        //查询并回传
+        Object obj = ReflectUtil.getObjectFJSON(requestInfo.getJsonString(), ReflectUtil.hasThisClass(requestInfo.getClassName()));
+
+        CommonSelectForm commonSelectForm = new CommonSelectForm();
+        List<String> field = new ArrayList<>();
+        List<Params> params = new ArrayList<>();
+        //设置表名
+        commonSelectForm.setTableName(ReflectUtil.getTableName(requestInfo.getClassName()));
+        //设置查询参数
+        for (Field fieldName : obj.getClass().getDeclaredFields()
+        ) {
+            //遍历所有属性判断是否需要进行加入判断条件
+            fieldName.setAccessible(true);
+            field.add(ReflectUtil.getTableName(fieldName.getName()));
+            try {
+                if (fieldName.get(obj) != null && !StringTools.isEmpty(fieldName.get(obj).toString())) {
+                    params.add(new Params() {{
+                        //若这个地方有值 说明他需要被加入查询条件
+                        this.setParam(fieldName.get(obj).toString());
+                        this.setProperty(ReflectUtil.getTableName(fieldName.getName()));
+                        this.setTableField(ReflectUtil.getTableName(fieldName.getName()));
+                    }});
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println(field.size());
+        commonSelectForm.setParams(params);
+        commonSelectForm.setTableFields(field);
+        return baseMapper.replace(commonSelectForm);
+    }
+
 
     public BaseMapper getMapper(RequestInfo requestInfo) {
         Class mapper = ReflectUtil.hasThisMapper(requestInfo.getClassName() + "Mapper");

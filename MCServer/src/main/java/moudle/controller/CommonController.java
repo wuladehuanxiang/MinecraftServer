@@ -94,6 +94,11 @@ public class CommonController {
         return RespResult.succeed(this.CommonService.verificationService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/replace", method = RequestMethod.POST)
+    public RespResult replace(@Valid @RequestBody RequestMessage<RequestInfo> message) {
+        return RespResult.succeed(this.CommonService.replaceService(message.getContent()), RespCodeEnum.SUCCESS.getMessage());
+    }
 
 
 }

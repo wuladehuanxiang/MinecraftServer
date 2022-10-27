@@ -8,7 +8,7 @@
             ${item}
         </foreach>
         FROM
-            ${form.tableName}
+        ${form.tableName}
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             AND del_flag = 0
             <foreach collection="form.params" index="index" item="data" open="" separator="" close="">
@@ -22,4 +22,19 @@
             LIMIT ${page.pageNum}, ${page.pageSize}
         </if>
     </select>
+
+
+    <insert id="replace" useGeneratedKeys="true" parameterType="moudle.entity.form.CommonSelectForm">
+        REPLACE INTO ${form.tableName} (
+        <foreach collection="form.tableFields" index="index" item="item" open="" separator="," close="">
+            ${item}
+        </foreach>)
+        VALUES(
+        <foreach collection="form.params" index="index" item="data" open="" separator="," close="">
+            '${data.param}'
+        </foreach>
+        )
+    </insert>
+
+
 </mapper>

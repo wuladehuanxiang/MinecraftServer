@@ -17,4 +17,7 @@ public interface CommonMapper extends BaseMapper<Object> {
 
     List<Object> commonSelectList(@Param("form") CommonSelectForm commonSelectForm,
                                   @Param("page") BasePageInfo basePageInfo);
+
+    int replace(@Param("form") CommonSelectForm commonSelectForm);
+
 }
