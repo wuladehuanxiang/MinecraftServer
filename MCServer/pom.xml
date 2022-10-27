@@ -278,7 +278,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!-- 指定main方法入口 -->
                 <configuration>
-                    <mainClass>moudle.MainApplication</mainClass>
+                    <mainClass>module.MainApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

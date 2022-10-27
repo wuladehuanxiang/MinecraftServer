@@ -18,13 +18,13 @@ mybatis-plus:
 
 logging:
   level:
-    moudle.dao: debug
+    module.dao: debug
     springfox.documentation.schema: error
     root: INFO
     org.hibernate: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
-    moudle: DEBUG
+    module: DEBUG
 
 # Sa-Token配置
 sa-token:
