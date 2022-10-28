@@ -19,9 +19,9 @@ import module.entity.SysUser;
 import module.entity.form.CommonSelectForm;
 import module.entity.form.Params;
 import module.service.CommonService;
-import module.utils.ReflectUtil;
-import module.utils.StringTools;
-import module.utils.UUIdUtils;
+import module.common.utils.ReflectUtil;
+import module.common.utils.StringTools;
+import module.common.utils.UUIdUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

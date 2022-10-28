@@ -2,7 +2,7 @@ package module.common.base;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import module.utils.StringTools;
+import module.common.utils.StringTools;
 
 import java.util.List;
 

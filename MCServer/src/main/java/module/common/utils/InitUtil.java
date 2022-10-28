@@ -1,4 +1,4 @@
-package module.utils;
+package module.common.utils;
 
 
 import module.data.StaticData;

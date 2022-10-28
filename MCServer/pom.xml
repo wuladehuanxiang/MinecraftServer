@@ -49,6 +49,14 @@
         <swagger-bootstrap-ui.version>3.0.3</swagger-bootstrap-ui.version>
         <!-- swagger end -->
         <git-commit.version>4.9.10</git-commit.version>
+
+        <!-- spring cloud security start -->
+        <spring-cloud-security.version>2.2.1.RELEASE</spring-cloud-security.version>
+        <spring-cloud-oauth2.version>2.2.1.RELEASE</spring-cloud-oauth2.version>
+        <security.oauth.version>2.3.6.RELEASE</security.oauth.version>
+        <spring-social-security.version>1.1.6.RELEASE</spring-social-security.version>
+        <spring-session-data-redis.version>2.6.3</spring-session-data-redis.version>
+        <!-- spring cloud security end -->
     </properties>
     <dependencies>
 
@@ -223,6 +231,28 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+
+        <!--安全模块-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+            <version>${spring-cloud-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>${spring-cloud-oauth2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-security</artifactId>
+            <version>${spring-social-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <version>${spring-session-data-redis.version}</version>
         </dependency>
 
     </dependencies>

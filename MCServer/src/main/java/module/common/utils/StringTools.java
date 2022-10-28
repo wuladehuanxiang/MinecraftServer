@@ -1,4 +1,4 @@
-package module.utils;
+package module.common.utils;
 
 import cn.hutool.core.codec.Base64;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package module.utils;
+package module.common.utils;
 
 
 public class DataUtil {

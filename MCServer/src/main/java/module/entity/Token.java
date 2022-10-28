@@ -1,10 +1,13 @@
 package module.entity;
 
+import lombok.Data;
+
 /**
  * @author: wula
  * @date: 2022/09/12
  * 用户登陆用的token
  **/
+@Data
 public class Token {
     /**
      * 用户的uuid
