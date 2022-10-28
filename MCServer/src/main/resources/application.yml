@@ -2,6 +2,10 @@ server:
   port: 8888
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: mc-server
   datasource:
     dynamic:
       strict: false
@@ -43,3 +47,12 @@ sa-token:
   # 是否输出操作日志
   is-log: false
 
+# swagger 接口文档配置
+swagger:
+  title: MC服务
+  description: MC服务
+  version: V1.0.0
+  contact:
+    name: Dragon丿Z
+    email: wula@hanhan
+    url:

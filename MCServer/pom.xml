@@ -210,18 +210,29 @@
             <version>${hibernate-validator.version}</version>
         </dependency>
 
-        <!--swagger-->
-        <!--        <dependency>
-                    <groupId>io.springfox</groupId>
-                    <artifactId>springfox-swagger2</artifactId>
-                    <version>${springfox-swagger2.version}</version>
-                </dependency>
-                &lt;!&ndash; knife4j&ndash;&gt;
-                <dependency>
-                    <groupId>com.github.xiaoymin</groupId>
-                    <artifactId>knife4j-spring-boot-starter</artifactId>
-                    <version>${swagger-bootstrap-ui.version}</version>
-                </dependency>-->
+        <!-- knife4j-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${swagger-bootstrap-ui.version}</version>
+        </dependency>
+        <!-- swagger2 接口文档 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox-swagger2.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
