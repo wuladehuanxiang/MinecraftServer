@@ -1,7 +1,6 @@
 package module.common.base;
 
 import com.github.pagehelper.PageInfo;
-//import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,12 +22,10 @@ public class RespPageInfo<T> implements Serializable {
     /**
      * 总记录数
      */
-    //@ApiModelProperty("总记录数")
     private long total;
     /**
      * 列表数据
      */
-    //@ApiModelProperty("数据列表")
     private List<T> rows;
 
     public RespPageInfo(List<T> rows) {

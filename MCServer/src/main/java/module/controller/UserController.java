@@ -1,7 +1,5 @@
 package module.controller;
 
-//import io.swagger.annotations.ApiOperation;
-
 import module.common.base.RequestMessage;
 import module.common.base.RespResult;
 import module.common.enums.RespCodeEnum;
@@ -50,7 +48,6 @@ public class UserController {
      * "respMsg": "处理成功"
      * }
      */
-    //@ApiOperation(value = "新增用户")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public RespResult<SysUser> add(@Valid @RequestBody RequestMessage<SysUser> message) {
 

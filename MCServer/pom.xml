@@ -44,18 +44,14 @@
         <hibernate-validator.version>6.0.0.Final</hibernate-validator.version>
         <!-- db end  -->
 
-        <!-- swagger start -->
-        <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
-        <swagger-bootstrap-ui.version>3.0.3</swagger-bootstrap-ui.version>
-        <!-- swagger end -->
         <git-commit.version>4.9.10</git-commit.version>
 
         <!-- spring cloud security start -->
-        <spring-cloud-security.version>2.2.1.RELEASE</spring-cloud-security.version>
-        <spring-cloud-oauth2.version>2.2.1.RELEASE</spring-cloud-oauth2.version>
+        <spring-cloud-security.version>2.2.5.RELEASE</spring-cloud-security.version>
+        <spring-cloud-oauth2.version>2.6.8</spring-cloud-oauth2.version>
         <security.oauth.version>2.3.6.RELEASE</security.oauth.version>
         <spring-social-security.version>1.1.6.RELEASE</spring-social-security.version>
-        <spring-session-data-redis.version>2.6.3</spring-session-data-redis.version>
+        <spring-session-data-redis.version>2.7.0</spring-session-data-redis.version>
         <!-- spring cloud security end -->
     </properties>
     <dependencies>
@@ -210,29 +206,6 @@
             <version>${hibernate-validator.version}</version>
         </dependency>
 
-        <!-- knife4j-->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>${swagger-bootstrap-ui.version}</version>
-        </dependency>
-        <!-- swagger2 接口文档 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox-swagger2.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -245,26 +218,31 @@
         </dependency>
 
         <!--安全模块-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-security -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
+            <artifactId>spring-cloud-security</artifactId>
             <version>${spring-cloud-security.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth.boot/spring-security-oauth2-autoconfigure -->
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
             <version>${spring-cloud-oauth2.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-security</artifactId>
             <version>${spring-social-security.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
             <version>${spring-session-data-redis.version}</version>
         </dependency>
+
 
     </dependencies>
 

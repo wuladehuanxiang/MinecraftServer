@@ -41,7 +41,6 @@ public class CommonController {
      *                }
      * @return 结果
      */
-    //@ApiOperation(value = "新增服务")
     @CrossOrigin
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public RespResult create(@Valid @RequestBody RequestMessage<RequestInfo> message) {
@@ -54,7 +53,6 @@ public class CommonController {
      * @param message
      * @return
      */
-    //@ApiOperation(value = "删除")
     @CrossOrigin
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public RespResult delete(@Valid @RequestBody RequestMessage<RequestInfo> message) {
@@ -67,7 +65,6 @@ public class CommonController {
      * @param message
      * @return
      */
-    //@ApiOperation(value = "更新")
     @CrossOrigin
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public RespResult update(@Valid @RequestBody RequestMessage<RequestInfo> message) {
@@ -80,7 +77,6 @@ public class CommonController {
      * @param message
      * @return
      */
-    //@ApiOperation(value = "查询")
     @CrossOrigin
     @RequestMapping(value = "/request", method = RequestMethod.POST)
     public RespResult request(@Valid @RequestBody RequestMessage<RequestInfo> message) {
